@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>2 Package Design Notes | Creating the conformr R package</title>
+<meta name="description" content="2 Package Design Notes | Creating the conformr R package">
+<meta name="generator" content="bookdown 0.39 and GitBook 2.6.7">
+<meta property="og:title" content="2 Package Design Notes | Creating the conformr R package">
+<meta property="og:type" content="book">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2 Package Design Notes | Creating the conformr R package">
+<meta name="author" content="Cynthia Huang">
+<meta name="date" content="2024-07-01">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="prev" href="index.html">
+<link rel="next" href="package-setup.html">
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script><link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet">
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet">
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet">
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script><style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">fieldset.chunkfield {border:1px dotted black;padding-bottom: 0px;padding-top: 0px;margin:0 2px;padding:.35em .625em .75em}
+    legend.chunklegend {padding:0;width:auto;border:0; border-bottom: none; margin-bottom:0}
+    </style>
+</head>
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation"><ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html">
+<a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#documentation-functions"><i class="fa fa-check"></i><b>1.1</b> Documentation Functions</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="2" data-path="package-design-notes.html">
+<a href="package-design-notes.html"><i class="fa fa-check"></i><b>2</b> Package Design Notes</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="package-design-notes.html">
+<a href="package-design-notes.html#example-dataset-designs"><i class="fa fa-check"></i><b>2.1</b> Example Dataset Designs</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="package-design-notes.html"><a href="package-design-notes.html#indstat-across-isic-standards"><i class="fa fa-check"></i><b>2.1.1</b> INDSTAT across ISIC standards</a></li>
+<li class="chapter" data-level="2.1.2" data-path="package-design-notes.html"><a href="package-design-notes.html#wtocomtrade-data-across-harmonised-system-versions"><i class="fa fa-check"></i><b>2.1.2</b> WTO/ComTrade Data across Harmonised System versions</a></li>
+<li class="chapter" data-level="2.1.3" data-path="package-design-notes.html"><a href="package-design-notes.html#abs-labor-force-statistics-across-anzsco"><i class="fa fa-check"></i><b>2.1.3</b> ABS labor force statistics across ANZSCO</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="2.2" data-path="package-design-notes.html">
+<a href="package-design-notes.html#existing-implementations-and-approaches"><i class="fa fa-check"></i><b>2.2</b> Existing Implementations and Approaches</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="package-design-notes.html"><a href="package-design-notes.html#hadley_data-fuel-economy"><i class="fa fa-check"></i><b>2.2.1</b> hadley_data-fuel-economy</a></li>
+<li class="chapter" data-level="2.2.2" data-path="package-design-notes.html"><a href="package-design-notes.html#schott_stata-trade-concordance"><i class="fa fa-check"></i><b>2.2.2</b> schott_stata-trade-concordance</a></li>
+<li class="chapter" data-level="2.2.3" data-path="package-design-notes.html"><a href="package-design-notes.html#kolczynska_trust-in-institutions"><i class="fa fa-check"></i><b>2.2.3</b> kolczynska_trust-in-institutions</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="2.3" data-path="package-design-notes.html">
+<a href="package-design-notes.html#existing-crosswalk-packages"><i class="fa fa-check"></i><b>2.3</b> Existing Crosswalk Packages</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="package-design-notes.html"><a href="package-design-notes.html#countrycode_look-up-tables"><i class="fa fa-check"></i><b>2.3.1</b> countrycode_look-up-tables</a></li>
+<li class="chapter" data-level="2.3.2" data-path="package-design-notes.html"><a href="package-design-notes.html#concordance_look-up-tables"><i class="fa fa-check"></i><b>2.3.2</b> concordance_look-up-tables</a></li>
+<li class="chapter" data-level="2.3.3" data-path="package-design-notes.html"><a href="package-design-notes.html#debkeepr_non-decimal-currencies"><i class="fa fa-check"></i><b>2.3.3</b> debkeepr_non-decimal-currencies</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="chapter" data-level="3" data-path="package-setup.html">
+<a href="package-setup.html"><i class="fa fa-check"></i><b>3</b> Package setup</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="package-setup.html"><a href="package-setup.html#dependencies"><i class="fa fa-check"></i><b>3.1</b> Dependencies</a></li>
+<li class="chapter" data-level="3.2" data-path="package-setup.html"><a href="package-setup.html#utilities"><i class="fa fa-check"></i><b>3.2</b> Utilities</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="4" data-path="core-functions.html">
+<a href="core-functions.html"><i class="fa fa-check"></i><b>4</b> Core Functions</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="core-functions.html"><a href="core-functions.html#setup-testing-data"><i class="fa fa-check"></i><b>4.1</b> Setup Testing Data</a></li>
+<li class="chapter" data-level="4.2" data-path="core-functions.html">
+<a href="core-functions.html#valid-transformation-conditions"><i class="fa fa-check"></i><b>4.2</b> Valid Transformation Conditions</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="core-functions.html"><a href="core-functions.html#complete-mapping-weights"><i class="fa fa-check"></i><b>4.2.1</b> Complete Mapping Weights</a></li>
+<li class="chapter" data-level="4.2.2" data-path="core-functions.html"><a href="core-functions.html#no-missing-data-values"><i class="fa fa-check"></i><b>4.2.2</b> No Missing Data Values</a></li>
+<li class="chapter" data-level="4.2.3" data-path="core-functions.html"><a href="core-functions.html#source-code-coverage"><i class="fa fa-check"></i><b>4.2.3</b> Source Code Coverage</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="4.3" data-path="core-functions.html">
+<a href="core-functions.html#use-panel-map-on-data"><i class="fa fa-check"></i><b>4.3</b> Use Panel Map on Data</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="core-functions.html"><a href="core-functions.html#single-step-concordance"><i class="fa fa-check"></i><b>4.3.1</b> Single Step Concordance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="chapter" data-level="5" data-path="package-datasets.html"><a href="package-datasets.html"><i class="fa fa-check"></i><b>5</b> Package Datasets</a></li>
+<li class="chapter" data-level="6" data-path="validation-helper-functions.html">
+<a href="validation-helper-functions.html"><i class="fa fa-check"></i><b>6</b> Validation Helper Functions</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="validation-helper-functions.html">
+<a href="validation-helper-functions.html#panel-map"><i class="fa fa-check"></i><b>6.1</b> Panel Map</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="validation-helper-functions.html"><a href="validation-helper-functions.html#generate-equal-weights"><i class="fa fa-check"></i><b>6.1.1</b> Generate Equal Weights</a></li>
+<li class="chapter" data-level="6.1.2" data-path="validation-helper-functions.html"><a href="validation-helper-functions.html#get-bad-weights-tbc"><i class="fa fa-check"></i><b>6.1.2</b> Get Bad Weights (TBC)</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="6.2" data-path="validation-helper-functions.html"><a href="validation-helper-functions.html#data-preparation-for-concordance-transformation"><i class="fa fa-check"></i><b>6.2</b> Data Preparation for Concordance Transformation</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="7" data-path="workflows-and-extensions.html">
+<a href="workflows-and-extensions.html"><i class="fa fa-check"></i><b>7</b> Workflows and Extensions</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#related-nomenclature-variables"><i class="fa fa-check"></i><b>7.1</b> Related Nomenclature Variables</a></li>
+<li class="chapter" data-level="7.2" data-path="workflows-and-extensions.html">
+<a href="workflows-and-extensions.html#multiple-transformations"><i class="fa fa-check"></i><b>7.2</b> Multiple Transformations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#multi-step-transformation-wip"><i class="fa fa-check"></i><b>7.2.1</b> Multi-Step Transformation (WIP)</a></li>
+<li class="chapter" data-level="7.2.2" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#multi-group-transformations-wip"><i class="fa fa-check"></i><b>7.2.2</b> Multi-Group Transformations (WIP)</a></li>
+<li class="chapter" data-level="7.2.3" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#mutli-map-group-transformations-wip"><i class="fa fa-check"></i><b>7.2.3</b> Mutli-Map-Group Transformations (WIP)</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="7.3" data-path="workflows-and-extensions.html">
+<a href="workflows-and-extensions.html#visualising-panel-map-representations"><i class="fa fa-check"></i><b>7.3</b> Visualising Panel Map Representations</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#panel-maps-as-graphs"><i class="fa fa-check"></i><b>7.3.1</b> Panel Maps as Graphs</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="7.4" data-path="workflows-and-extensions.html">
+<a href="workflows-and-extensions.html#custom-mapping-weights"><i class="fa fa-check"></i><b>7.4</b> Custom Mapping Weights</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#manual-design-and-encoding"><i class="fa fa-check"></i><b>7.4.1</b> Manual Design and Encoding</a></li>
+<li class="chapter" data-level="7.4.2" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#use-reference-proportions"><i class="fa fa-check"></i><b>7.4.2</b> Use Reference Proportions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="chapter" data-level="8" data-path="conclude.html">
+<a href="conclude.html"><i class="fa fa-check"></i><b>8</b> Conclusion</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="conclude.html"><a href="conclude.html#write-internal-data-to-package"><i class="fa fa-check"></i><b>8.1</b> Write internal data to package</a></li>
+<li class="chapter" data-level="8.2" data-path="conclude.html"><a href="conclude.html#document-the-package"><i class="fa fa-check"></i><b>8.2</b> Document the package</a></li>
+<li class="chapter" data-level="8.3" data-path="conclude.html"><a href="conclude.html#include-pacakge-readme.md"><i class="fa fa-check"></i><b>8.3</b> Include pacakge README.md</a></li>
+</ul>
+</li>
+</ul></nav>
+</div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Creating the <code>conformr</code> R package</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-"><div id="package-design-notes" class="section level1 hasAnchor" number="2">
+<h1>
+<span class="header-section-number">2</span> Package Design Notes<a href="package-design-notes.html#package-design-notes" class="anchor-section" aria-label="Anchor link to header"></a>
+</h1>
+<div id="example-dataset-designs" class="section level2 hasAnchor" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> Example Dataset Designs<a href="package-design-notes.html#example-dataset-designs" class="anchor-section" aria-label="Anchor link to header"></a>
+</h2>
+<p>This section collects and/or defines example datasets, concordances and transformations from different domains.</p>
+<p>Types of crosswalks/concordances include:</p>
+<ul>
+<li><p>Classification changes - HS, ISIC etc.</p></li>
+<li><p>Geographic (administrative/survey) area changes – <a href="https://www.qgso.qld.gov.au/about-statistics/analysing-data/concordance-information">Queensland Government Statistician’s Office</a></p></li>
+</ul>
+<div id="indstat-across-isic-standards" class="section level3 hasAnchor" number="2.1.1">
+<h3>
+<span class="header-section-number">2.1.1</span> INDSTAT across ISIC standards<a href="package-design-notes.html#indstat-across-isic-standards" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<ul>
+<li>Initial reproducible approach: <a href="https://cynthiahqy.github.io/indstat-TPP/" class="uri">https://cynthiahqy.github.io/indstat-TPP/</a>
+</li>
+<li>Demo rewrite of first transformation step using old version of <code>{conformr}</code>: <a href="https://github.com/cynthiahqy/conformr-indstat" class="uri">https://github.com/cynthiahqy/conformr-indstat</a>
+</li>
+</ul>
+</div>
+<div id="wtocomtrade-data-across-harmonised-system-versions" class="section level3 hasAnchor" number="2.1.2">
+<h3>
+<span class="header-section-number">2.1.2</span> WTO/ComTrade Data across Harmonised System versions<a href="package-design-notes.html#wtocomtrade-data-across-harmonised-system-versions" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+</div>
+<div id="abs-labor-force-statistics-across-anzsco" class="section level3 hasAnchor" number="2.1.3">
+<h3>
+<span class="header-section-number">2.1.3</span> ABS labor force statistics across ANZSCO<a href="package-design-notes.html#abs-labor-force-statistics-across-anzsco" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+</div>
+</div>
+<div id="existing-implementations-and-approaches" class="section level2 hasAnchor" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> Existing Implementations and Approaches<a href="package-design-notes.html#existing-implementations-and-approaches" class="anchor-section" aria-label="Anchor link to header"></a>
+</h2>
+<p>Collection of current approaches to harmonisation</p>
+<div id="hadley_data-fuel-economy" class="section level3 hasAnchor" number="2.2.1">
+<h3>
+<span class="header-section-number">2.2.1</span> hadley_data-fuel-economy<a href="package-design-notes.html#hadley_data-fuel-economy" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<p>From <span class="citation">@wickham2014</span> and <a href="https://tidyr.tidyverse.org/articles/tidy-data.html#tidying">tidy-data vignette</a>:</p>
+<blockquote>
+<p>A more complicated situation occurs when the dataset structure changes over time. For example, the datasets may contain different variables, the same variables with different names, different file formats, or different conventions for missing values. This may require you to tidy each file to individually (or, if you’re lucky, in small groups) and then combine them once tidied. An example of this type of tidying is illustrated in <a href="https://github.com/hadley/data-fuel-economy" class="uri">https://github.com/hadley/data-fuel-economy</a>, which shows the tidying of epa fuel economy data for over 50,000 cars from 1978 to 2008. The raw data is available online, but each year is stored in a separate file and there are four major formats with many minor variations, making tidying this dataset a considerable challenge.</p>
+</blockquote>
+</div>
+<div id="schott_stata-trade-concordance" class="section level3 hasAnchor" number="2.2.2">
+<h3>
+<span class="header-section-number">2.2.2</span> schott_stata-trade-concordance<a href="package-design-notes.html#schott_stata-trade-concordance" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<p>See: <a href="https://sompks4.github.io/sub_data.html" class="uri">https://sompks4.github.io/sub_data.html</a></p>
+</div>
+<div id="kolczynska_trust-in-institutions" class="section level3 hasAnchor" number="2.2.3">
+<h3>
+<span class="header-section-number">2.2.3</span> kolczynska_trust-in-institutions<a href="package-design-notes.html#kolczynska_trust-in-institutions" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<p>Link to code for crosswalk based harmonisation: <a href="https://osf.io/qt2eb/" class="uri">https://osf.io/qt2eb/</a></p>
+<p>From <span class="citation">@kolczynska2022</span>:</p>
+<blockquote>
+<p>Ex-post harmonization of survey data creates new opportunities for research by extending the geographical and/or time coverage of analyses. Researchers increasingly combine data from different survey projects to analyze them as a single dataset, and while teams engaged in data harmonization continue to expand the information they provide to end users, there are still no commonly agreed standards for the documentation of data processing. Existing harmonization project typically opt for recode scripts that are generally hard to read, modify, and reuse, although some projects make efforts to facilitate verification and reproduction. This paper describes an alternative procedure and a set of simple tools for the exploration, recoding, and documentation of harmonization of survey data, relying on crosswalks. The presented tools are flexible and software-agnostic. The illustrative example uses the programming language R and spreadsheets—both common software choices among social scientists. Harmonization of variables on trust in institutions from four major cross-national survey projects serves as an illustration of the proposed workflow and of opportunities harmonization creates.</p>
+</blockquote>
+</div>
+</div>
+<div id="existing-crosswalk-packages" class="section level2 hasAnchor" number="2.3">
+<h2>
+<span class="header-section-number">2.3</span> Existing Crosswalk Packages<a href="package-design-notes.html#existing-crosswalk-packages" class="anchor-section" aria-label="Anchor link to header"></a>
+</h2>
+<p>A collection of R packages that (I think) offer special cases or components of the conformr workflow</p>
+<div id="countrycode_look-up-tables" class="section level3 hasAnchor" number="2.3.1">
+<h3>
+<span class="header-section-number">2.3.1</span> countrycode_look-up-tables<a href="package-design-notes.html#countrycode_look-up-tables" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+</div>
+<div id="concordance_look-up-tables" class="section level3 hasAnchor" number="2.3.2">
+<h3>
+<span class="header-section-number">2.3.2</span> concordance_look-up-tables<a href="package-design-notes.html#concordance_look-up-tables" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+</div>
+<div id="debkeepr_non-decimal-currencies" class="section level3 hasAnchor" number="2.3.3">
+<h3>
+<span class="header-section-number">2.3.3</span> debkeepr_non-decimal-currencies<a href="package-design-notes.html#debkeepr_non-decimal-currencies" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<p>By Jesse Sadler:</p>
+<blockquote>
+<p>The <code>debkeepr</code> package provides an interface for working with non-decimal currencies that use tripartite or tetrapartite systems such as that of pounds, shillings, and pence. <code>debkeepr</code> makes it easier to perform arithmetic operations on non-decimal values and facilitates the analysis and visualization of larger sets of non-decimal values such as those found in historical account books. This is accomplished through the implementation of the <code>deb_lsd</code>,<code>deb_tetra</code>, and <code>deb_decimal</code> vector types, which are based on the infrastructure provided by the <a href="https://vctrs.r-lib.org/">vctrs package</a>. <code>deb_lsd</code>, <code>deb_tetra</code>, and <code>deb_decimal</code> vectors possess additional metadata to allow them to behave like numeric vectors in many circumstances, while also conforming to the workings of non-decimal currencies.</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+            </section>
+</div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="package-setup.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script><script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script><script src="libs/gitbook-2.6.7/js/plugin-search.js"></script><script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script><script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script><script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script><script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script><script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script><script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>3 Functions | Creating the bdconformr R package</title>
+<meta name="description" content="3 Functions | Creating the bdconformr R package">
+<meta name="generator" content="bookdown 0.30 and GitBook 2.6.7">
+<meta property="og:title" content="3 Functions | Creating the bdconformr R package">
+<meta property="og:type" content="book">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="3 Functions | Creating the bdconformr R package">
+<meta name="author" content="Cynthia Huang">
+<meta name="date" content="2022-11-18">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="prev" href="package-setup.html">
+<link rel="next" href="conclude.html">
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script><link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet">
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet">
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet">
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script><style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<style type="text/css">fieldset.chunkfield {border:1px dotted black;padding-bottom: 0px;padding-top: 0px;margin:0 2px;padding:.35em .625em .75em}
+    legend.chunklegend {padding:0;width:auto;border:0; border-bottom: none; margin-bottom:0}
+    </style>
+</head>
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation"><ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html">
+<a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#documentation-functions"><i class="fa fa-check"></i><b>1.1</b> Documentation Functions</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#inbox"><i class="fa fa-check"></i><b>1.2</b> Inbox</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="2" data-path="package-setup.html">
+<a href="package-setup.html"><i class="fa fa-check"></i><b>2</b> Package setup</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="package-setup.html"><a href="package-setup.html#dependencies"><i class="fa fa-check"></i><b>2.1</b> Dependencies</a></li>
+<li class="chapter" data-level="2.2" data-path="package-setup.html"><a href="package-setup.html#utilities"><i class="fa fa-check"></i><b>2.2</b> Utilities</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="3" data-path="functions.html">
+<a href="functions.html"><i class="fa fa-check"></i><b>3</b> Functions</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="functions.html">
+<a href="functions.html#panel-map-concepts"><i class="fa fa-check"></i><b>3.1</b> Panel Map Concepts</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="functions.html"><a href="functions.html#toy-example-setup"><i class="fa fa-check"></i><b>3.1.1</b> Toy Example Setup</a></li>
+<li class="chapter" data-level="3.1.2" data-path="functions.html"><a href="functions.html#panel-maps-as-matrices"><i class="fa fa-check"></i><b>3.1.2</b> Panel Maps as Matrices</a></li>
+<li class="chapter" data-level="3.1.3" data-path="functions.html"><a href="functions.html#panel-maps-as-graphs"><i class="fa fa-check"></i><b>3.1.3</b> Panel Maps as Graphs</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="3.2" data-path="functions.html">
+<a href="functions.html#generate-default-mapping-weights"><i class="fa fa-check"></i><b>3.2</b> Generate Default Mapping Weights</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="functions.html"><a href="functions.html#equal-weights"><i class="fa fa-check"></i><b>3.2.1</b> Equal Weights</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="3.3" data-path="functions.html">
+<a href="functions.html#valid-panel-maps"><i class="fa fa-check"></i><b>3.3</b> Valid Panel Maps</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="functions.html"><a href="functions.html#complete-weights"><i class="fa fa-check"></i><b>3.3.1</b> Complete Weights</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="3.4" data-path="functions.html">
+<a href="functions.html#valid-transformations"><i class="fa fa-check"></i><b>3.4</b> Valid Transformations</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="functions.html"><a href="functions.html#source-code-coverage"><i class="fa fa-check"></i><b>3.4.1</b> Source Code Coverage</a></li>
+<li class="chapter" data-level="3.4.2" data-path="functions.html"><a href="functions.html#no-missing-values"><i class="fa fa-check"></i><b>3.4.2</b> No Missing Values</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="3.5" data-path="functions.html">
+<a href="functions.html#use-panel-map-on-data"><i class="fa fa-check"></i><b>3.5</b> Use Panel Map on Data</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="functions.html"><a href="functions.html#functions-5"><i class="fa fa-check"></i><b>3.5.1</b> Functions</a></li>
+<li class="chapter" data-level="3.5.2" data-path="functions.html"><a href="functions.html#example-code"><i class="fa fa-check"></i><b>3.5.2</b> Example Code</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="chapter" data-level="4" data-path="conclude.html"><a href="conclude.html"><i class="fa fa-check"></i><b>4</b> Conclusion</a></li>
+</ul></nav>
+</div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Creating the <code>bdconformr</code> R package</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-"><div id="functions" class="section level1 hasAnchor" number="3">
+<h1>
+<span class="header-section-number">3</span> Functions<a href="functions.html#functions" class="anchor-section" aria-label="Anchor link to header"></a>
+</h1>
+<div id="panel-map-concepts" class="section level2 hasAnchor" number="3.1">
+<h2>
+<span class="header-section-number">3.1</span> Panel Map Concepts<a href="functions.html#panel-map-concepts" class="anchor-section" aria-label="Anchor link to header"></a>
+</h2>
+<div id="toy-example-setup" class="section level3 hasAnchor" number="3.1.1">
+<h3>
+<span class="header-section-number">3.1.1</span> Toy Example Setup<a href="functions.html#toy-example-setup" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="functions.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## correspondence/concordance table</span></span>
+<span id="cb15-2"><a href="functions.html#cb15-2" aria-hidden="true" tabindex="-1"></a>codes_BA <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">tribble</span>(<span class="sc">~</span> std_B, <span class="sc">~</span> std_A,</span>
+<span id="cb15-3"><a href="functions.html#cb15-3" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"A1"</span>, <span class="st">"x1111"</span>, <span class="co"># one-to-one</span></span>
+<span id="cb15-4"><a href="functions.html#cb15-4" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"B2"</span>, <span class="st">"x2222"</span>, <span class="co"># many-to-one</span></span>
+<span id="cb15-5"><a href="functions.html#cb15-5" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"B2"</span>, <span class="st">"x3333"</span>,</span>
+<span id="cb15-6"><a href="functions.html#cb15-6" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"C3"</span>, <span class="st">"x4444"</span>, <span class="co"># one-to-many (4)</span></span>
+<span id="cb15-7"><a href="functions.html#cb15-7" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"C4"</span>, <span class="st">"x4444"</span>,</span>
+<span id="cb15-8"><a href="functions.html#cb15-8" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"C4"</span>, <span class="st">"x6666"</span>, <span class="co"># many-to-many</span></span>
+<span id="cb15-9"><a href="functions.html#cb15-9" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"C5"</span>, <span class="st">"x4444"</span>,</span>
+<span id="cb15-10"><a href="functions.html#cb15-10" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"C6"</span>, <span class="st">"x4444"</span>,</span>
+<span id="cb15-11"><a href="functions.html#cb15-11" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"C7"</span>, <span class="st">"x5555"</span>, <span class="co"># one-to-many (3)</span></span>
+<span id="cb15-12"><a href="functions.html#cb15-12" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"C8"</span>, <span class="st">"x5555"</span>,</span>
+<span id="cb15-13"><a href="functions.html#cb15-13" aria-hidden="true" tabindex="-1"></a>                           )</span>
+<span id="cb15-14"><a href="functions.html#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="functions.html#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="do">## panel_map</span></span>
+<span id="cb15-16"><a href="functions.html#cb15-16" aria-hidden="true" tabindex="-1"></a>weights_BA <span class="ot">&lt;-</span> codes_BA <span class="sc">|&gt;</span></span>
+<span id="cb15-17"><a href="functions.html#cb15-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>(std_B, std_A) <span class="sc">|&gt;</span></span>
+<span id="cb15-18"><a href="functions.html#cb15-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(std_A) <span class="sc">|&gt;</span></span>
+<span id="cb15-19"><a href="functions.html#cb15-19" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">n_dest =</span> dplyr<span class="sc">::</span><span class="fu">n</span>(),</span>
+<span id="cb15-20"><a href="functions.html#cb15-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">weight =</span> <span class="dv">1</span> <span class="sc">/</span> n_dest) <span class="sc">|&gt;</span></span>
+<span id="cb15-21"><a href="functions.html#cb15-21" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>()</span>
+<span id="cb15-22"><a href="functions.html#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-23"><a href="functions.html#cb15-23" aria-hidden="true" tabindex="-1"></a>pm_BA <span class="ot">&lt;-</span> weights_BA <span class="sc">|&gt;</span></span>
+<span id="cb15-24"><a href="functions.html#cb15-24" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(std_B, std_A, weight)</span></code></pre></div>
+<p>Write this data into the package for testing purposes.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="functions.html#cb16-1" aria-hidden="true" tabindex="-1"></a>equal_pm <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"codes_BA"</span> <span class="ot">=</span> codes_BA,</span>
+<span id="cb16-2"><a href="functions.html#cb16-2" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"weights_BA"</span> <span class="ot">=</span> weights_BA,</span>
+<span id="cb16-3"><a href="functions.html#cb16-3" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"pm_BA"</span> <span class="ot">=</span> pm_BA)</span>
+<span id="cb16-4"><a href="functions.html#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="functions.html#cb16-5" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_data</span>(equal_pm, <span class="at">internal =</span> <span class="cn">TRUE</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## ✔ Adding 'R' to Depends field in DESCRIPTION
+## ✔ Saving 'equal_pm' to 'R/sysdata.rda'</code></pre>
+</div>
+<div id="panel-maps-as-matrices" class="section level3 hasAnchor" number="3.1.2">
+<h3>
+<span class="header-section-number">3.1.2</span> Panel Maps as Matrices<a href="functions.html#panel-maps-as-matrices" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<p>We can visualise a panel map as the addition of weights to the concordance:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="functions.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb18-2"><a href="functions.html#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="functions.html#cb18-3" aria-hidden="true" tabindex="-1"></a>inc_long <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">expand</span>(codes_BA, std_A, std_B) <span class="sc">|&gt;</span></span>
+<span id="cb18-4"><a href="functions.html#cb18-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(pm_BA, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"std_A"</span>, <span class="st">"std_B"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb18-5"><a href="functions.html#cb18-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">transmute</span>(<span class="at">to =</span> std_B, <span class="at">from =</span> std_A, <span class="at">weight =</span> weight)</span>
+<span id="cb18-6"><a href="functions.html#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="functions.html#cb18-7" aria-hidden="true" tabindex="-1"></a>gg_inc_mtx <span class="ot">&lt;-</span> inc_long <span class="sc">|&gt;</span> </span>
+<span id="cb18-8"><a href="functions.html#cb18-8" aria-hidden="true" tabindex="-1"></a>  <a href="index.html#plt_inc_long_mtx">plt_inc_long_mtx</a>(to, from, weight) <span class="sc">+</span></span>
+<span id="cb18-9"><a href="functions.html#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Concordance as Incidence Matrix"</span>)</span>
+<span id="cb18-10"><a href="functions.html#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="functions.html#cb18-11" aria-hidden="true" tabindex="-1"></a>gg_pm_mtx <span class="ot">&lt;-</span> gg_inc_mtx <span class="sc">+</span> </span>
+<span id="cb18-12"><a href="functions.html#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(inc_long, <span class="sc">!</span><span class="fu">is.na</span>(weight)), <span class="fu">aes</span>(<span class="at">label=</span><span class="fu">round</span>(weight, <span class="dv">2</span>))) <span class="sc">+</span></span>
+<span id="cb18-13"><a href="functions.html#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"adding equal weights for Valid Panel Map"</span>)</span></code></pre></div>
+<div style="display: flex;">
+<div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="functions.html#cb19-1" aria-hidden="true" tabindex="-1"></a>gg_inc_mtx</span></code></pre></div>
+<p><img src="_main_files/figure-html/gg-no-weight-martix-1.png" width="672"></p>
+</div>
+<div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="functions.html#cb20-1" aria-hidden="true" tabindex="-1"></a>gg_pm_mtx</span></code></pre></div>
+<p><img src="_main_files/figure-html/gg-equal-weight-matrix-1.png" width="672"></p>
+</div>
+</div>
+</div>
+<div id="panel-maps-as-graphs" class="section level3 hasAnchor" number="3.1.3">
+<h3>
+<span class="header-section-number">3.1.3</span> Panel Maps as Graphs<a href="functions.html#panel-maps-as-graphs" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="functions.html#cb21-1" aria-hidden="true" tabindex="-1"></a>pm_BA <span class="sc">|&gt;</span> <a href="index.html#plt_pm_sigmoid">plt_pm_sigmoid</a>(std_A, std_B, weight) <span class="sc">+</span></span>
+<span id="cb21-2"><a href="functions.html#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette=</span><span class="st">"RdPu"</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
+</div>
+</div>
+<div id="generate-default-mapping-weights" class="section level2 hasAnchor" number="3.2">
+<h2>
+<span class="header-section-number">3.2</span> Generate Default Mapping Weights<a href="functions.html#generate-default-mapping-weights" class="anchor-section" aria-label="Anchor link to header"></a>
+</h2>
+<div id="equal-weights" class="section level3 hasAnchor" number="3.2.1">
+<h3>
+<span class="header-section-number">3.2.1</span> Equal Weights<a href="functions.html#equal-weights" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<p>In the most simple case, to make a panel map, we need only a correspondence between a source nomenclature (<code>std_A</code>) and target nomenclature (<code>std_B</code>), which doesn’t have any duplicate rows.</p>
+<div id="functions-1" class="section level4 hasAnchor" number="3.2.1.1">
+<h4>
+<span class="header-section-number">3.2.1.1</span> Functions<a href="functions.html#functions-1" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<p>This is a helper function for making a valid Panel Map with equal Mapping Weights from a concordance table.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="functions.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Helper to build equal split panel map</span></span>
+<span id="cb22-2"><a href="functions.html#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb22-3"><a href="functions.html#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' Generate panel map using all *distinct* correspondences between two classifications.</span></span>
+<span id="cb22-4"><a href="functions.html#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb22-5"><a href="functions.html#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param code_dict Data frame containing correspondence between source and destination codes</span></span>
+<span id="cb22-6"><a href="functions.html#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param code_in Variable in `code_dict` containing source codes to convert from.</span></span>
+<span id="cb22-7"><a href="functions.html#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param code_out Variable in `code_dict` containing destination codes to convert to.</span></span>
+<span id="cb22-8"><a href="functions.html#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param .weights_to (optional) new column name for storing weights that will be applied to. The default name is `split_&lt;&lt;code_in&gt;&gt;`.</span></span>
+<span id="cb22-9"><a href="functions.html#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' input values.</span></span>
+<span id="cb22-10"><a href="functions.html#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb22-11"><a href="functions.html#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return Returns panel map as tibble</span></span>
+<span id="cb22-12"><a href="functions.html#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
+<span id="cb22-13"><a href="functions.html#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb22-14"><a href="functions.html#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="co">#' @examples</span></span>
+<span id="cb22-15"><a href="functions.html#cb22-15" aria-hidden="true" tabindex="-1"></a><span id="make_pm_equal">make_pm_equal</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(code_dict, code_in, code_out, <span class="at">.weights_to =</span> <span class="cn">NULL</span>){</span>
+<span id="cb22-16"><a href="functions.html#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="do">## check and remove for duplicates</span></span>
+<span id="cb22-17"><a href="functions.html#cb22-17" aria-hidden="true" tabindex="-1"></a>  n_dups <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">duplicated</span>(code_dict))</span>
+<span id="cb22-18"><a href="functions.html#cb22-18" aria-hidden="true" tabindex="-1"></a>  no_dup_links <span class="ot">&lt;-</span> n_dups <span class="sc">==</span> <span class="dv">0</span></span>
+<span id="cb22-19"><a href="functions.html#cb22-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span>no_dup_links) {</span>
+<span id="cb22-20"><a href="functions.html#cb22-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"Removing duplicate code_in/code_out rows"</span>)</span>
+<span id="cb22-21"><a href="functions.html#cb22-21" aria-hidden="true" tabindex="-1"></a>    code_dict <span class="ot">&lt;-</span> code_dict <span class="sc">|&gt;</span></span>
+<span id="cb22-22"><a href="functions.html#cb22-22" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">distinct</span>({{code_in}}, {{code_out}})</span>
+<span id="cb22-23"><a href="functions.html#cb22-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb22-24"><a href="functions.html#cb22-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-25"><a href="functions.html#cb22-25" aria-hidden="true" tabindex="-1"></a>  <span class="do">## make column name for weights</span></span>
+<span id="cb22-26"><a href="functions.html#cb22-26" aria-hidden="true" tabindex="-1"></a>  .weights_to <span class="ot">&lt;-</span> .weights_to <span class="sc">%||%</span> <span class="fu">paste</span>(<span class="st">"split"</span>, <span class="fu">deparse</span>(<span class="fu">substitute</span>(code_in)), <span class="at">sep =</span> <span class="st">"_"</span>)</span>
+<span id="cb22-27"><a href="functions.html#cb22-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-28"><a href="functions.html#cb22-28" aria-hidden="true" tabindex="-1"></a>  <span class="do">## make panel map</span></span>
+<span id="cb22-29"><a href="functions.html#cb22-29" aria-hidden="true" tabindex="-1"></a>  panel_map <span class="ot">&lt;-</span> code_dict <span class="sc">|&gt;</span></span>
+<span id="cb22-30"><a href="functions.html#cb22-30" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>({{code_in}}) <span class="sc">|&gt;</span></span>
+<span id="cb22-31"><a href="functions.html#cb22-31" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">n_dest =</span> dplyr<span class="sc">::</span><span class="fu">n</span>(),</span>
+<span id="cb22-32"><a href="functions.html#cb22-32" aria-hidden="true" tabindex="-1"></a>                  <span class="sc">!!</span><span class="at">.weights_to :=</span> <span class="dv">1</span> <span class="sc">/</span> n_dest) <span class="sc">|&gt;</span></span>
+<span id="cb22-33"><a href="functions.html#cb22-33" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb22-34"><a href="functions.html#cb22-34" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>n_dest)</span>
+<span id="cb22-35"><a href="functions.html#cb22-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-36"><a href="functions.html#cb22-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(panel_map)</span>
+<span id="cb22-37"><a href="functions.html#cb22-37" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Use this helper on the concordance table defined above:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="functions.html#cb23-1" aria-hidden="true" tabindex="-1"></a><a href="functions.html#make_pm_equal">make_pm_equal</a>(codes_BA, std_A, std_B, <span class="st">"weights"</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 10 × 3
+##    std_B std_A weights
+##    &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;
+##  1 A1    x1111    1   
+##  2 B2    x2222    1   
+##  3 B2    x3333    1   
+##  4 C3    x4444    0.25
+##  5 C4    x4444    0.25
+##  6 C4    x6666    1   
+##  7 C5    x4444    0.25
+##  8 C6    x4444    0.25
+##  9 C7    x5555    0.5 
+## 10 C8    x5555    0.5</code></pre>
+<p>This function uses the <code>no_dup_links</code> flag to removes any duplicate instructions/links, to avoid assigning unequal shares to each target code/category (shown as <code>naive_share</code>):</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="functions.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb25-2"><a href="functions.html#cb25-2" aria-hidden="true" tabindex="-1"></a>codes <span class="ot">&lt;-</span> <span class="fu">tribble</span>(<span class="sc">~</span>code_in, <span class="sc">~</span>code_out,</span>
+<span id="cb25-3"><a href="functions.html#cb25-3" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"cake"</span>, <span class="st">"piece_01"</span>,</span>
+<span id="cb25-4"><a href="functions.html#cb25-4" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"cake"</span>, <span class="st">"piece_02"</span>,</span>
+<span id="cb25-5"><a href="functions.html#cb25-5" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"cake"</span>, <span class="st">"piece_03"</span>,</span>
+<span id="cb25-6"><a href="functions.html#cb25-6" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"cake"</span>, <span class="st">"piece_03"</span> <span class="do">## duplicated row</span></span>
+<span id="cb25-7"><a href="functions.html#cb25-7" aria-hidden="true" tabindex="-1"></a>                 )</span>
+<span id="cb25-8"><a href="functions.html#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="functions.html#cb25-9" aria-hidden="true" tabindex="-1"></a>codes <span class="sc">|&gt;</span></span>
+<span id="cb25-10"><a href="functions.html#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="do">## equal share by code_out</span></span>
+<span id="cb25-11"><a href="functions.html#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">equal_share =</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fu">n_distinct</span>(code_out)) <span class="sc">|&gt;</span></span>
+<span id="cb25-12"><a href="functions.html#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="do">## without duplicates removed</span></span>
+<span id="cb25-13"><a href="functions.html#cb25-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(code_in) <span class="sc">|&gt;</span></span>
+<span id="cb25-14"><a href="functions.html#cb25-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"n_dest"</span> <span class="ot">=</span> <span class="fu">n</span>(),</span>
+<span id="cb25-15"><a href="functions.html#cb25-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">weight :=</span> <span class="dv">1</span> <span class="sc">/</span> n_dest) <span class="sc">|&gt;</span></span>
+<span id="cb25-16"><a href="functions.html#cb25-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb25-17"><a href="functions.html#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>n_dest) <span class="sc">|&gt;</span></span>
+<span id="cb25-18"><a href="functions.html#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(code_out) <span class="sc">|&gt;</span></span>
+<span id="cb25-19"><a href="functions.html#cb25-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb25-20"><a href="functions.html#cb25-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">weights =</span> <span class="fu">paste</span>(weight, <span class="at">collapse =</span> <span class="st">"+"</span>),</span>
+<span id="cb25-21"><a href="functions.html#cb25-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">naive_share =</span> <span class="fu">sum</span>(weight),</span>
+<span id="cb25-22"><a href="functions.html#cb25-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">equal_share =</span> <span class="fu">unique</span>(equal_share)</span>
+<span id="cb25-23"><a href="functions.html#cb25-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 4
+##   code_out weights   naive_share equal_share
+##   &lt;chr&gt;    &lt;chr&gt;           &lt;dbl&gt;       &lt;dbl&gt;
+## 1 piece_01 0.25             0.25       0.333
+## 2 piece_02 0.25             0.25       0.333
+## 3 piece_03 0.25+0.25        0.5        0.333</code></pre>
+</div>
+<div id="tests" class="section level4 hasAnchor" number="3.2.1.2">
+<h4>
+<span class="header-section-number">3.2.1.2</span> Tests<a href="functions.html#tests" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="functions.html#cb27-1" aria-hidden="true" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_that</span>(</span>
+<span id="cb27-2"><a href="functions.html#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"<a href="functions.html#make_pm_equal">make_pm_equal</a>() works"</span>,</span>
+<span id="cb27-3"><a href="functions.html#cb27-3" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb27-4"><a href="functions.html#cb27-4" aria-hidden="true" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_identical</span>(</span>
+<span id="cb27-5"><a href="functions.html#cb27-5" aria-hidden="true" tabindex="-1"></a>      <a href="functions.html#make_pm_equal">make_pm_equal</a>(equal_pm<span class="sc">$</span>codes_BA, std_A, std_B, <span class="at">.weights_to =</span> <span class="st">"weight"</span>), equal_pm<span class="sc">$</span>pm_BA)</span>
+<span id="cb27-6"><a href="functions.html#cb27-6" aria-hidden="true" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_no_message</span>(</span>
+<span id="cb27-7"><a href="functions.html#cb27-7" aria-hidden="true" tabindex="-1"></a>      <a href="functions.html#make_pm_equal">make_pm_equal</a>(equal_pm<span class="sc">$</span>codes_BA, std_A, std_B, <span class="at">.weights_to =</span> <span class="st">"weight"</span>))</span>
+<span id="cb27-8"><a href="functions.html#cb27-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb27-9"><a href="functions.html#cb27-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-10"><a href="functions.html#cb27-10" aria-hidden="true" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_that</span>(</span>
+<span id="cb27-11"><a href="functions.html#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"<a href="functions.html#make_pm_equal">make_pm_equal</a>() handles duplicate link correctly"</span>,</span>
+<span id="cb27-12"><a href="functions.html#cb27-12" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb27-13"><a href="functions.html#cb27-13" aria-hidden="true" tabindex="-1"></a>    dup_codes_BA <span class="ot">&lt;-</span> <span class="fu">rbind</span>(equal_pm<span class="sc">$</span>codes_BA, equal_pm<span class="sc">$</span>codes_BA[<span class="dv">1</span>, ])</span>
+<span id="cb27-14"><a href="functions.html#cb27-14" aria-hidden="true" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_message</span>(</span>
+<span id="cb27-15"><a href="functions.html#cb27-15" aria-hidden="true" tabindex="-1"></a>      <a href="functions.html#make_pm_equal">make_pm_equal</a>(dup_codes_BA, std_A, std_B)</span>
+<span id="cb27-16"><a href="functions.html#cb27-16" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb27-17"><a href="functions.html#cb27-17" aria-hidden="true" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_identical</span>(</span>
+<span id="cb27-18"><a href="functions.html#cb27-18" aria-hidden="true" tabindex="-1"></a>      <a href="functions.html#make_pm_equal">make_pm_equal</a>(dup_codes_BA, std_A, std_B, <span class="at">.weights_to =</span> <span class="st">"weight"</span>), equal_pm<span class="sc">$</span>pm_BA</span>
+<span id="cb27-19"><a href="functions.html#cb27-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb27-20"><a href="functions.html#cb27-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb27-21"><a href="functions.html#cb27-21" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Test passed 😀</code></pre>
+<pre><code>## Removing duplicate code_in/code_out rows</code></pre>
+<pre><code>## Test passed 🌈</code></pre>
+</div>
+</div>
+</div>
+<div id="valid-panel-maps" class="section level2 hasAnchor" number="3.3">
+<h2>
+<span class="header-section-number">3.3</span> Valid Panel Maps<a href="functions.html#valid-panel-maps" class="anchor-section" aria-label="Anchor link to header"></a>
+</h2>
+<div id="complete-weights" class="section level3 hasAnchor" number="3.3.1">
+<h3>
+<span class="header-section-number">3.3.1</span> Complete Weights<a href="functions.html#complete-weights" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<p>A valid panel map is an mapping from source to target nomenclatures which when applied to suitably dimensioned source data, transforms that data into the target nomenclature without creation or loss of value (beyond floating point rounding). This can also be thought of as a condition whereby the sum total of a variable remains the same before and after the transformation.</p>
+<p>The following condition is necessary and sufficient for a set of Source Codes, Target Codes and Mapping Weights to be a valid panel map:</p>
+<blockquote>
+<p>The sum of all Mapping Weights associated with any given Source Code totals to 1</p>
+</blockquote>
+<p>To demonstrate, let us generate some source data:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="functions.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="do">## generate some data</span></span>
+<span id="cb31-2"><a href="functions.html#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1832</span>)</span>
+<span id="cb31-3"><a href="functions.html#cb31-3" aria-hidden="true" tabindex="-1"></a>std_A_codes <span class="ot">&lt;-</span> <span class="fu">unique</span>(codes_BA<span class="sc">$</span>std_A)</span>
+<span id="cb31-4"><a href="functions.html#cb31-4" aria-hidden="true" tabindex="-1"></a>(data_in <span class="ot">&lt;-</span> </span>
+<span id="cb31-5"><a href="functions.html#cb31-5" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">std_A =</span> std_A_codes,</span>
+<span id="cb31-6"><a href="functions.html#cb31-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">A_100   =</span> <span class="dv">100</span>,</span>
+<span id="cb31-7"><a href="functions.html#cb31-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">A_prod  =</span> <span class="fu">round</span>(<span class="fu">abs</span>(<span class="fu">rnorm</span>(<span class="fu">length</span>(std_A_codes)) <span class="sc">*</span> <span class="dv">10000</span>),<span class="dv">2</span>)</span>
+<span id="cb31-8"><a href="functions.html#cb31-8" aria-hidden="true" tabindex="-1"></a>                  )</span>
+<span id="cb31-9"><a href="functions.html#cb31-9" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   std_A A_100 A_prod
+##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1 x1111   100 15275.
+## 2 x2222   100  7432.
+## 3 x3333   100  1970.
+## 4 x4444   100   837.
+## 5 x6666   100  9976.
+## 6 x5555   100  1217.</code></pre>
+<p>Now let’s switch to using the matrix representation of panel maps:</p>
+<p>Let <span class="math inline">\(\bf{C}\)</span> be a <span class="math inline">\(n \times m\)</span> matrix showing the incidence between two disjoint sets (<code>inc_mtx</code>), and let <span class="math inline">\(\bf{X}\)</span> be the source variables (<code>x_mtx</code>) requiring transformation. Then, the transformed data is <span class="math inline">\(\bf{Z} = \bf{C'X}\)</span>:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="functions.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="do">## incidence matrix</span></span>
+<span id="cb33-2"><a href="functions.html#cb33-2" aria-hidden="true" tabindex="-1"></a>inc_mtx <span class="ot">&lt;-</span> inc_long <span class="sc">|&gt;</span></span>
+<span id="cb33-3"><a href="functions.html#cb33-3" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">weight=</span><span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb33-4"><a href="functions.html#cb33-4" aria-hidden="true" tabindex="-1"></a>  <a href="index.html#inc_long_to_mtx">inc_long_to_mtx</a>(to, weight)</span>
+<span id="cb33-5"><a href="functions.html#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="functions.html#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="do">## source data matrix</span></span>
+<span id="cb33-7"><a href="functions.html#cb33-7" aria-hidden="true" tabindex="-1"></a>x_mtx <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(data_in[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb33-8"><a href="functions.html#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(x_mtx)[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> std_A_codes</span>
+<span id="cb33-9"><a href="functions.html#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="functions.html#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="do">## transformed data</span></span>
+<span id="cb33-11"><a href="functions.html#cb33-11" aria-hidden="true" tabindex="-1"></a>z_mtx <span class="ot">&lt;-</span> <span class="fu">t</span>(inc_mtx) <span class="sc">%*%</span> x_mtx</span></code></pre></div>
+<div style="display: flex;">
+<div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="functions.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">t</span>(inc_mtx), <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##    x1111 x2222 x3333 x4444 x5555 x6666
+## A1     1     0     0  0.00   0.0     0
+## B2     0     1     1  0.00   0.0     0
+## C3     0     0     0  0.25   0.0     0
+## C4     0     0     0  0.25   0.0     1
+## C5     0     0     0  0.25   0.0     0
+## C6     0     0     0  0.25   0.0     0
+## C7     0     0     0  0.00   0.5     0
+## C8     0     0     0  0.00   0.5     0</code></pre>
+</div>
+<div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="functions.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(x_mtx)</span></code></pre></div>
+<pre><code>##       A_100   A_prod
+## x1111   100 15274.93
+## x2222   100  7431.98
+## x3333   100  1970.36
+## x4444   100   836.72
+## x6666   100  9976.27
+## x5555   100  1216.67</code></pre>
+</div>
+</div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="functions.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(z_mtx)</span></code></pre></div>
+<pre><code>##    A_100    A_prod
+## A1   100 15274.930
+## B2   200  9402.340
+## C3    25   209.180
+## C4   125  1425.850
+## C5    25   209.180
+## C6    25   209.180
+## C7    50  4988.135
+## C8    50  4988.135</code></pre>
+<p>Notice that the sum total of <code>A_100</code> is the same before and after the transformation.</p>
+<div style="display: flex;">
+<div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="functions.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(x_mtx)</span></code></pre></div>
+<pre><code>##    A_100   A_prod 
+##   600.00 36706.93</code></pre>
+</div>
+<div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="functions.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(z_mtx)</span></code></pre></div>
+<pre><code>##    A_100   A_prod 
+##   600.00 36706.93</code></pre>
+</div>
+</div>
+<p>Now, let’s edit the panel map such that the weights no longer sum to one:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="functions.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="do">## edit weights</span></span>
+<span id="cb44-2"><a href="functions.html#cb44-2" aria-hidden="true" tabindex="-1"></a>bad_pm <span class="ot">&lt;-</span> pm_BA <span class="sc">|&gt;</span> </span>
+<span id="cb44-3"><a href="functions.html#cb44-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">weight =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb44-4"><a href="functions.html#cb44-4" aria-hidden="true" tabindex="-1"></a>                           weight <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> weight,</span>
+<span id="cb44-5"><a href="functions.html#cb44-5" aria-hidden="true" tabindex="-1"></a>                           weight <span class="sc">&lt;</span> <span class="fl">0.5</span> <span class="sc">~</span> weight <span class="sc">-</span> <span class="fl">0.03</span>,</span>
+<span id="cb44-6"><a href="functions.html#cb44-6" aria-hidden="true" tabindex="-1"></a>                           weight <span class="sc">&gt;=</span> <span class="fl">0.5</span> <span class="sc">~</span> weight <span class="sc">+</span> <span class="fl">0.01</span>,</span>
+<span id="cb44-7"><a href="functions.html#cb44-7" aria-hidden="true" tabindex="-1"></a>                           T <span class="sc">~</span> weight))</span>
+<span id="cb44-8"><a href="functions.html#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="functions.html#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="do">## incidence matrix</span></span>
+<span id="cb44-10"><a href="functions.html#cb44-10" aria-hidden="true" tabindex="-1"></a>bad_mtx <span class="ot">&lt;-</span> bad_pm <span class="sc">|&gt;</span></span>
+<span id="cb44-11"><a href="functions.html#cb44-11" aria-hidden="true" tabindex="-1"></a>  <a href="index.html#inc_long_to_mtx">inc_long_to_mtx</a>(std_B, weight)</span>
+<span id="cb44-12"><a href="functions.html#cb44-12" aria-hidden="true" tabindex="-1"></a>bad_mtx[<span class="fu">is.na</span>(bad_mtx)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb44-13"><a href="functions.html#cb44-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-14"><a href="functions.html#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="do">## transform data badly</span></span>
+<span id="cb44-15"><a href="functions.html#cb44-15" aria-hidden="true" tabindex="-1"></a>bad_z <span class="ot">&lt;-</span> <span class="fu">t</span>(bad_mtx) <span class="sc">%*%</span> x_mtx</span></code></pre></div>
+<p>Notice what happens when we apply the transformation:</p>
+<div style="display: flex;">
+<div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="functions.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">t</span>(bad_mtx), <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##    x1111 x2222 x3333 x4444 x6666 x5555
+## A1     1     0     0  0.00     0  0.00
+## B2     0     1     1  0.00     0  0.00
+## C3     0     0     0  0.22     0  0.00
+## C4     0     0     0  0.22     1  0.00
+## C5     0     0     0  0.22     0  0.00
+## C6     0     0     0  0.22     0  0.00
+## C7     0     0     0  0.00     0  0.51
+## C8     0     0     0  0.00     0  0.51</code></pre>
+</div>
+<div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="functions.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(x_mtx)</span></code></pre></div>
+<pre><code>##       A_100   A_prod
+## x1111   100 15274.93
+## x2222   100  7431.98
+## x3333   100  1970.36
+## x4444   100   836.72
+## x6666   100  9976.27
+## x5555   100  1216.67</code></pre>
+</div>
+</div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="functions.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(bad_z)</span></code></pre></div>
+<pre><code>##    A_100     A_prod
+## A1   100 15274.9300
+## B2   200  9402.3400
+## C3    22   184.0784
+## C4   122 10160.3484
+## C5    22   184.0784
+## C6    22   184.0784
+## C7    51   620.5017
+## C8    51   620.5017</code></pre>
+<p>Notice that the sum totals are no longer the same before and after the transformation:</p>
+<div style="display: flex;">
+<div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="functions.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(x_mtx)</span></code></pre></div>
+<pre><code>##    A_100   A_prod 
+##   600.00 36706.93</code></pre>
+</div>
+<div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="functions.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(bad_z)</span></code></pre></div>
+<pre><code>##    A_100   A_prod 
+##   590.00 36630.86</code></pre>
+</div>
+</div>
+<p>Hence, the validity condition can also be expressed as follows:
+&gt; A given incidence matrix <span class="math inline">\(\bf{K}\)</span> with dimensions <span class="math inline">\(n \times m\)</span> is a valid panel map if and only if <span class="math inline">\(\bf{K}\boldsymbol{1} = \boldsymbol{1}\)</span> where <span class="math inline">\(\boldsymbol{1}\)</span> is a unit vector of length <span class="math inline">\(m\)</span>:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="functions.html#cb55-1" aria-hidden="true" tabindex="-1"></a>ones <span class="ot">&lt;-</span> <span class="fu">rep_len</span>(<span class="dv">1</span>, <span class="fu">ncol</span>(inc_mtx))</span></code></pre></div>
+<div style="display: flex;">
+<div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="functions.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(inc_mtx, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##       A1 B2   C3   C4   C5   C6  C7  C8
+## x1111  1  0 0.00 0.00 0.00 0.00 0.0 0.0
+## x2222  0  1 0.00 0.00 0.00 0.00 0.0 0.0
+## x3333  0  1 0.00 0.00 0.00 0.00 0.0 0.0
+## x4444  0  0 0.25 0.25 0.25 0.25 0.0 0.0
+## x5555  0  0 0.00 0.00 0.00 0.00 0.5 0.5
+## x6666  0  0 0.00 1.00 0.00 0.00 0.0 0.0</code></pre>
+</div>
+<div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="functions.html#cb58-1" aria-hidden="true" tabindex="-1"></a>inc_mtx <span class="sc">%*%</span> ones</span></code></pre></div>
+<pre><code>##       [,1]
+## x1111    1
+## x2222    1
+## x3333    1
+## x4444    1
+## x5555    1
+## x6666    1</code></pre>
+</div>
+</div>
+<div id="functions-2" class="section level4 hasAnchor" number="3.3.1.1">
+<h4>
+<span class="header-section-number">3.3.1.1</span> Functions<a href="functions.html#functions-2" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="functions.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Flag Bad Mapping Weights</span></span>
+<span id="cb60-2"><a href="functions.html#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb60-3"><a href="functions.html#cb60-3" aria-hidden="true" tabindex="-1"></a><span id="has_bad_weights">has_bad_weights</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(pm, code_in, code_out, weights){</span>
+<span id="cb60-4"><a href="functions.html#cb60-4" aria-hidden="true" tabindex="-1"></a>  bad_rows <span class="ot">&lt;-</span> pm <span class="sc">%&gt;%</span></span>
+<span id="cb60-5"><a href="functions.html#cb60-5" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>({{code_in}}) <span class="sc">%&gt;%</span></span>
+<span id="cb60-6"><a href="functions.html#cb60-6" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">total =</span> <span class="fu">sum</span>({{weights}}),</span>
+<span id="cb60-7"><a href="functions.html#cb60-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">weights =</span> <span class="fu">paste</span>({{weights}}, <span class="at">collapse=</span><span class="st">","</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb60-8"><a href="functions.html#cb60-8" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(total <span class="sc">!=</span> <span class="dv">1</span>)</span>
+<span id="cb60-9"><a href="functions.html#cb60-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb60-10"><a href="functions.html#cb60-10" aria-hidden="true" tabindex="-1"></a>  is_bad <span class="ot">&lt;-</span> <span class="sc">!</span>(<span class="fu">nrow</span>(bad_rows) <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb60-11"><a href="functions.html#cb60-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb60-12"><a href="functions.html#cb60-12" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">bool =</span> is_bad,</span>
+<span id="cb60-13"><a href="functions.html#cb60-13" aria-hidden="true" tabindex="-1"></a>                 <span class="at">table =</span> bad_rows)</span>
+<span id="cb60-14"><a href="functions.html#cb60-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb60-15"><a href="functions.html#cb60-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb60-16"><a href="functions.html#cb60-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-17"><a href="functions.html#cb60-17" aria-hidden="true" tabindex="-1"></a><span class="co">#' Check panel map weights are valid</span></span>
+<span id="cb60-18"><a href="functions.html#cb60-18" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb60-19"><a href="functions.html#cb60-19" aria-hidden="true" tabindex="-1"></a><span class="co">#' for use in pipes</span></span>
+<span id="cb60-20"><a href="functions.html#cb60-20" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb60-21"><a href="functions.html#cb60-21" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param pm Data Frame containing weighted links `weights` between `code_in` and `code_out`.</span></span>
+<span id="cb60-22"><a href="functions.html#cb60-22" aria-hidden="true" tabindex="-1"></a><span class="co">#' @inherit make_pm_equal</span></span>
+<span id="cb60-23"><a href="functions.html#cb60-23" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param weights Column containing weights for transforming values from `code_in` to `code_out`</span></span>
+<span id="cb60-24"><a href="functions.html#cb60-24" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb60-25"><a href="functions.html#cb60-25" aria-hidden="true" tabindex="-1"></a><span class="co">#' @exports </span></span>
+<span id="cb60-26"><a href="functions.html#cb60-26" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb60-27"><a href="functions.html#cb60-27" aria-hidden="true" tabindex="-1"></a><span class="co">#' @returns </span></span>
+<span id="cb60-28"><a href="functions.html#cb60-28" aria-hidden="true" tabindex="-1"></a><span id="check_pm_weights">check_pm_weights</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(pm, code_in, code_out, weights){</span>
+<span id="cb60-29"><a href="functions.html#cb60-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb60-30"><a href="functions.html#cb60-30" aria-hidden="true" tabindex="-1"></a>  has_result <span class="ot">&lt;-</span> <a href="functions.html#has_bad_weights">has_bad_weights</a>(pm, {{code_in}}, {{code_out}}, {{weights}})</span>
+<span id="cb60-31"><a href="functions.html#cb60-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb60-32"><a href="functions.html#cb60-32" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span>has_result<span class="sc">$</span>bool){</span>
+<span id="cb60-33"><a href="functions.html#cb60-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(pm)</span>
+<span id="cb60-34"><a href="functions.html#cb60-34" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb60-35"><a href="functions.html#cb60-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># </span><span class="al">TODO</span><span class="co">: add informative error message</span></span>
+<span id="cb60-36"><a href="functions.html#cb60-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(has_result<span class="sc">$</span>table)</span>
+<span id="cb60-37"><a href="functions.html#cb60-37" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb60-38"><a href="functions.html#cb60-38" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="tests-1" class="section level4 hasAnchor" number="3.3.1.2">
+<h4>
+<span class="header-section-number">3.3.1.2</span> Tests<a href="functions.html#tests-1" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<ul>
+<li>flag function returns expected output</li>
+<li>check function works as expected:
+<ul>
+<li>returns informative error message</li>
+<li>returns unchanged panel map</li>
+</ul>
+</li>
+</ul>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="functions.html#cb61-1" aria-hidden="true" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">testthat</span>(</span>
+<span id="cb61-2"><a href="functions.html#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"has_bad_weights returns expected lists"</span>,</span>
+<span id="cb61-3"><a href="functions.html#cb61-3" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb61-4"><a href="functions.html#cb61-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb61-5"><a href="functions.html#cb61-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb61-6"><a href="functions.html#cb61-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="valid-transformations" class="section level2 hasAnchor" number="3.4">
+<h2>
+<span class="header-section-number">3.4</span> Valid Transformations<a href="functions.html#valid-transformations" class="anchor-section" aria-label="Anchor link to header"></a>
+</h2>
+<div id="source-code-coverage" class="section level3 hasAnchor" number="3.4.1">
+<h3>
+<span class="header-section-number">3.4.1</span> Source Code Coverage<a href="functions.html#source-code-coverage" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<p>A Panel Map must cover all Source Codes present in the Source Data. In other words, for a transformation to be valid, no Source Data should be left behind.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="functions.html#cb62-1" aria-hidden="true" tabindex="-1"></a>gg_x_mtx <span class="ot">&lt;-</span> <a href="index.html#plt_df_mtx">plt_df_mtx</a>(data_in, A_100<span class="sc">:</span>A_prod, std_A)</span>
+<span id="cb62-2"><a href="functions.html#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-3"><a href="functions.html#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb62-4"><a href="functions.html#cb62-4" aria-hidden="true" tabindex="-1"></a>gg_pm_mtx <span class="sc">+</span> </span>
+<span id="cb62-5"><a href="functions.html#cb62-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb62-6"><a href="functions.html#cb62-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span> gg_x_mtx <span class="sc">+</span></span>
+<span id="cb62-7"><a href="functions.html#cb62-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">position=</span><span class="st">"right"</span>, <span class="at">limits=</span>rev) <span class="sc">+</span></span>
+<span id="cb62-8"><a href="functions.html#cb62-8" aria-hidden="true" tabindex="-1"></a>patchwork<span class="sc">::</span><span class="fu">plot_annotation</span>(<span class="at">title=</span><span class="st">"Panel Map covers Source Data"</span>)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: 'patchwork'</code></pre>
+<pre><code>## The following object is masked from 'package:cowplot':
+## 
+##     align_plots</code></pre>
+<pre><code>## Scale for 'y' is already present. Adding another scale for 'y', which will
+## replace the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/gg-data-in-mtx-1.png" width="672"></p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="functions.html#cb66-1" aria-hidden="true" tabindex="-1"></a>gg_x_bad <span class="ot">&lt;-</span> data_in <span class="sc">|&gt;</span></span>
+<span id="cb66-2"><a href="functions.html#cb66-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">add_row</span>(<span class="at">std_A =</span> <span class="st">"x7285!"</span>, </span>
+<span id="cb66-3"><a href="functions.html#cb66-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">A_100 =</span> <span class="dv">100</span>, </span>
+<span id="cb66-4"><a href="functions.html#cb66-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">A_prod =</span> <span class="fl">3895.3</span>) <span class="sc">|&gt;</span></span>
+<span id="cb66-5"><a href="functions.html#cb66-5" aria-hidden="true" tabindex="-1"></a>  <a href="index.html#plt_df_mtx">plt_df_mtx</a>(A_100<span class="sc">:</span>A_prod, std_A)</span>
+<span id="cb66-6"><a href="functions.html#cb66-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-7"><a href="functions.html#cb66-7" aria-hidden="true" tabindex="-1"></a>gg_pm_bad <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">from=</span><span class="fu">c</span>(<span class="cn">NA</span>), <span class="at">to=</span><span class="fu">unique</span>(codes_BA<span class="sc">$</span>std_B)) <span class="sc">|&gt;</span></span>
+<span id="cb66-8"><a href="functions.html#cb66-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">weight=</span><span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
+<span id="cb66-9"><a href="functions.html#cb66-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(inc_long) <span class="sc">|&gt;</span></span>
+<span id="cb66-10"><a href="functions.html#cb66-10" aria-hidden="true" tabindex="-1"></a>  <a href="index.html#plt_inc_long_mtx">plt_inc_long_mtx</a>(to, from, weight) <span class="sc">+</span></span>
+<span id="cb66-11"><a href="functions.html#cb66-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(inc_long, <span class="sc">!</span><span class="fu">is.na</span>(weight)), <span class="fu">aes</span>(<span class="at">label=</span><span class="fu">round</span>(weight, <span class="dv">2</span>)))</span>
+<span id="cb66-12"><a href="functions.html#cb66-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-13"><a href="functions.html#cb66-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-14"><a href="functions.html#cb66-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb66-15"><a href="functions.html#cb66-15" aria-hidden="true" tabindex="-1"></a>gg_pm_bad <span class="sc">+</span> </span>
+<span id="cb66-16"><a href="functions.html#cb66-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb66-17"><a href="functions.html#cb66-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span> </span>
+<span id="cb66-18"><a href="functions.html#cb66-18" aria-hidden="true" tabindex="-1"></a>gg_x_bad <span class="sc">+</span></span>
+<span id="cb66-19"><a href="functions.html#cb66-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">position=</span><span class="st">"right"</span>, <span class="at">limits=</span>rev) <span class="sc">+</span></span>
+<span id="cb66-20"><a href="functions.html#cb66-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette=</span><span class="st">"Purples"</span>) <span class="sc">+</span></span>
+<span id="cb66-21"><a href="functions.html#cb66-21" aria-hidden="true" tabindex="-1"></a>patchwork<span class="sc">::</span><span class="fu">plot_annotation</span>(<span class="at">title=</span><span class="st">"Panel Map does not cover fully Source Data"</span>)</span></code></pre></div>
+<pre><code>## Scale for 'y' is already present. Adding another scale for 'y', which will
+## replace the existing scale.</code></pre>
+<pre><code>## Scale for 'fill' is already present. Adding another scale for 'fill', which
+## will replace the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/gg-no-coverage-1.png" width="672">
+Depending on how the transformation is implemented, coverage mismatches can result in both explicit and implicit/hidden errors. In particular, having conformable matrix dimensions is not sufficient to avoid corrupting data unless you check that the indices match. This is a common issue with using matrices for data wrangling, so this package implements transformations using database operations.</p>
+<div id="functions-3" class="section level4 hasAnchor" number="3.4.1.1">
+<h4>
+<span class="header-section-number">3.4.1.1</span> Functions<a href="functions.html#functions-3" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="functions.html#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co">#is_data_covered(data_in, pm, code_in, code_out, )</span></span></code></pre></div>
+</div>
+<div id="tests-2" class="section level4 hasAnchor" number="3.4.1.2">
+<h4>
+<span class="header-section-number">3.4.1.2</span> Tests<a href="functions.html#tests-2" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+</div>
+</div>
+<div id="no-missing-values" class="section level3 hasAnchor" number="3.4.2">
+<h3>
+<span class="header-section-number">3.4.2</span> No Missing Values<a href="functions.html#no-missing-values" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="functions.html#cb70-1" aria-hidden="true" tabindex="-1"></a>gg_pm_mtx <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
+<span id="cb70-2"><a href="functions.html#cb70-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-3"><a href="functions.html#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="co">#gg_NA_mtx &lt;- </span></span></code></pre></div>
+<p><img src="_main_files/figure-html/gg-na-data-in-1.png" width="672"></p>
+<div id="functions-4" class="section level4 hasAnchor" number="3.4.2.1">
+<h4>
+<span class="header-section-number">3.4.2.1</span> Functions<a href="functions.html#functions-4" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+</div>
+<div id="tests-3" class="section level4 hasAnchor" number="3.4.2.2">
+<h4>
+<span class="header-section-number">3.4.2.2</span> Tests<a href="functions.html#tests-3" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+</div>
+</div>
+</div>
+<div id="use-panel-map-on-data" class="section level2 hasAnchor" number="3.5">
+<h2>
+<span class="header-section-number">3.5</span> Use Panel Map on Data<a href="functions.html#use-panel-map-on-data" class="anchor-section" aria-label="Anchor link to header"></a>
+</h2>
+<p>Assuming all the validity conditions are met, we want a simple and concise way to apply a panel map to data which looks something like:</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="functions.html#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="do">## --- encode your transformation --- ##</span></span>
+<span id="cb71-2"><a href="functions.html#cb71-2" aria-hidden="true" tabindex="-1"></a>df_pm <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"your-panel-map.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-3"><a href="functions.html#cb71-3" aria-hidden="true" tabindex="-1"></a>  conform<span class="sc">::</span><span class="fu">validate_panel_map</span>()</span>
+<span id="cb71-4"><a href="functions.html#cb71-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-5"><a href="functions.html#cb71-5" aria-hidden="true" tabindex="-1"></a><span class="do">## --- prepare source data --- ##</span></span>
+<span id="cb71-6"><a href="functions.html#cb71-6" aria-hidden="true" tabindex="-1"></a>df_data_in <span class="ot">&lt;-</span></span>
+<span id="cb71-7"><a href="functions.html#cb71-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(<span class="st">"your-source-data.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-8"><a href="functions.html#cb71-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
+<span id="cb71-9"><a href="functions.html#cb71-9" aria-hidden="true" tabindex="-1"></a>  conform<span class="sc">::</span><span class="fu">validate_coverage</span>()</span>
+<span id="cb71-10"><a href="functions.html#cb71-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-11"><a href="functions.html#cb71-11" aria-hidden="true" tabindex="-1"></a><span class="do">## --- apply (valid) transformation --- ##</span></span>
+<span id="cb71-12"><a href="functions.html#cb71-12" aria-hidden="true" tabindex="-1"></a>conformr<span class="sc">::</span><a href="functions.html#use_panel_map">use_panel_map</a>(<span class="at">map =</span> df_pm,</span>
+<span id="cb71-13"><a href="functions.html#cb71-13" aria-hidden="true" tabindex="-1"></a>                        <span class="at">data_in =</span> df_data_in,</span>
+<span id="cb71-14"><a href="functions.html#cb71-14" aria-hidden="true" tabindex="-1"></a>                        <span class="at">values_from =</span> value_in,</span>
+<span id="cb71-15"><a href="functions.html#cb71-15" aria-hidden="true" tabindex="-1"></a>                        <span class="at">from_code =</span> source_code,</span>
+<span id="cb71-16"><a href="functions.html#cb71-16" aria-hidden="true" tabindex="-1"></a>                        <span class="at">to_code =</span> target_code,</span>
+<span id="cb71-17"><a href="functions.html#cb71-17" aria-hidden="true" tabindex="-1"></a>                        <span class="at">weights =</span> weight,</span>
+<span id="cb71-18"><a href="functions.html#cb71-18" aria-hidden="true" tabindex="-1"></a>                        <span class="at">suffix=</span><span class="st">"_out"</span>)</span></code></pre></div>
+<div id="functions-5" class="section level3 hasAnchor" number="3.5.1">
+<h3>
+<span class="header-section-number">3.5.1</span> Functions<a href="functions.html#functions-5" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<p>This function takes a valid panel map and data with matching names for the Source Code columns and transforms the data to the Target Classification.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="functions.html#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Apply panel_map to data without checks</span></span>
+<span id="cb72-2"><a href="functions.html#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb72-3"><a href="functions.html#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' A wrapper around a `{dplyr}` pipeline that takes a panel_map,</span></span>
+<span id="cb72-4"><a href="functions.html#cb72-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' joins it with data, and transforms selected variables in that data according to</span></span>
+<span id="cb72-5"><a href="functions.html#cb72-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' instructions in the panel map. Any groups in `data` are preserved.</span></span>
+<span id="cb72-6"><a href="functions.html#cb72-6" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb72-7"><a href="functions.html#cb72-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param map A data frame that contains a valid panel map for the transformation.</span></span>
+<span id="cb72-8"><a href="functions.html#cb72-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param data A data frame for transformation.</span></span>
+<span id="cb72-9"><a href="functions.html#cb72-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param values_from Variable in `data` containing the values to be converted.</span></span>
+<span id="cb72-10"><a href="functions.html#cb72-10" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param from_code A character string of the variable containing the codes to convert from.</span></span>
+<span id="cb72-11"><a href="functions.html#cb72-11" aria-hidden="true" tabindex="-1"></a><span class="co">#' Must be the same in `map` and `data`.</span></span>
+<span id="cb72-12"><a href="functions.html#cb72-12" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param to_code Variable in `map` containing the codes to convert to.</span></span>
+<span id="cb72-13"><a href="functions.html#cb72-13" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param weights Variable in `map` containing the weights to split values by.</span></span>
+<span id="cb72-14"><a href="functions.html#cb72-14" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param .suffix A string appended to `value_from` column name to create column names for transformed values.</span></span>
+<span id="cb72-15"><a href="functions.html#cb72-15" aria-hidden="true" tabindex="-1"></a><span class="co">#' Defaults to `to_code`</span></span>
+<span id="cb72-16"><a href="functions.html#cb72-16" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb72-17"><a href="functions.html#cb72-17" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param</span></span>
+<span id="cb72-18"><a href="functions.html#cb72-18" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb72-19"><a href="functions.html#cb72-19" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return The output has the following properties:</span></span>
+<span id="cb72-20"><a href="functions.html#cb72-20" aria-hidden="true" tabindex="-1"></a><span class="co">#' * Groups are taken from `data_in`</span></span>
+<span id="cb72-21"><a href="functions.html#cb72-21" aria-hidden="true" tabindex="-1"></a><span class="co">#' @export</span></span>
+<span id="cb72-22"><a href="functions.html#cb72-22" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb72-23"><a href="functions.html#cb72-23" aria-hidden="true" tabindex="-1"></a><span class="co">#' @examples</span></span>
+<span id="cb72-24"><a href="functions.html#cb72-24" aria-hidden="true" tabindex="-1"></a><span id="use_panel_map">use_panel_map</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(map, data_in, values_from, from_code, to_code, weights,</span>
+<span id="cb72-25"><a href="functions.html#cb72-25" aria-hidden="true" tabindex="-1"></a>                          <span class="at">.suffix =</span> <span class="cn">NULL</span>){</span>
+<span id="cb72-26"><a href="functions.html#cb72-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-27"><a href="functions.html#cb72-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert from_code to string</span></span>
+<span id="cb72-28"><a href="functions.html#cb72-28" aria-hidden="true" tabindex="-1"></a>  from_code <span class="ot">&lt;-</span> <span class="fu">as_string</span>(<span class="fu">enexpr</span>(from_code))</span>
+<span id="cb72-29"><a href="functions.html#cb72-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># subset data for transformation</span></span>
+<span id="cb72-30"><a href="functions.html#cb72-30" aria-hidden="true" tabindex="-1"></a>  data_in <span class="ot">&lt;-</span> data_in <span class="sc">%&gt;%</span></span>
+<span id="cb72-31"><a href="functions.html#cb72-31" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(dplyr<span class="sc">::</span><span class="fu">all_of</span>(from_code), {{values_from}})</span>
+<span id="cb72-32"><a href="functions.html#cb72-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-33"><a href="functions.html#cb72-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># merge map and data // use default by= argument</span></span>
+<span id="cb72-34"><a href="functions.html#cb72-34" aria-hidden="true" tabindex="-1"></a>  map_join_data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">right_join</span>(<span class="at">x =</span> data_in,</span>
+<span id="cb72-35"><a href="functions.html#cb72-35" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">y =</span> map,</span>
+<span id="cb72-36"><a href="functions.html#cb72-36" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">by =</span> from_code)</span>
+<span id="cb72-37"><a href="functions.html#cb72-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-38"><a href="functions.html#cb72-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># apply transformation</span></span>
+<span id="cb72-39"><a href="functions.html#cb72-39" aria-hidden="true" tabindex="-1"></a>  data_out <span class="ot">&lt;-</span> map_join_data <span class="sc">%&gt;%</span></span>
+<span id="cb72-40"><a href="functions.html#cb72-40" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(dplyr<span class="sc">::</span><span class="fu">across</span>({{ values_from }}, <span class="sc">~</span> .x <span class="sc">*</span> {{ weights }})) <span class="sc">%&gt;%</span></span>
+<span id="cb72-41"><a href="functions.html#cb72-41" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>({{ to_code }}, <span class="at">.add =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb72-42"><a href="functions.html#cb72-42" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(dplyr<span class="sc">::</span><span class="fu">across</span>({{ values_from }}, <span class="sc">~</span> <span class="fu">sum</span>(.x)), <span class="at">.groups =</span> <span class="st">"drop_last"</span>)</span>
+<span id="cb72-43"><a href="functions.html#cb72-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-44"><a href="functions.html#cb72-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># rename</span></span>
+<span id="cb72-45"><a href="functions.html#cb72-45" aria-hidden="true" tabindex="-1"></a>  names_suffix <span class="ot">&lt;-</span> .suffix <span class="sc">%||%</span> <span class="fu">paste0</span>(<span class="st">"_"</span>, <span class="fu">as_string</span>(<span class="fu">enexpr</span>(to_code)))</span>
+<span id="cb72-46"><a href="functions.html#cb72-46" aria-hidden="true" tabindex="-1"></a>  data_out <span class="ot">&lt;-</span> data_out <span class="sc">%&gt;%</span></span>
+<span id="cb72-47"><a href="functions.html#cb72-47" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename_with</span>(., <span class="sc">~</span> <span class="fu">paste0</span>(.x, names_suffix), <span class="at">.cols =</span> {{ values_from }})</span>
+<span id="cb72-48"><a href="functions.html#cb72-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-49"><a href="functions.html#cb72-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(data_out)</span>
+<span id="cb72-50"><a href="functions.html#cb72-50" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="example-code" class="section level3 hasAnchor" number="3.5.2">
+<h3>
+<span class="header-section-number">3.5.2</span> Example Code<a href="functions.html#example-code" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+
+</div>
+</div>
+</div>
+            </section>
+</div>
+        </div>
+      </div>
+<a href="package-setup.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conclude.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script><script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script><script src="libs/gitbook-2.6.7/js/plugin-search.js"></script><script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script><script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script><script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script><script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script><script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script><script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+</html>

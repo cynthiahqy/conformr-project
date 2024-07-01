@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>2 Documentation Functions | Creating the bdconformr R package</title>
+<meta name="description" content="2 Documentation Functions | Creating the bdconformr R package">
+<meta name="generator" content="bookdown 0.30 and GitBook 2.6.7">
+<meta property="og:title" content="2 Documentation Functions | Creating the bdconformr R package">
+<meta property="og:type" content="book">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2 Documentation Functions | Creating the bdconformr R package">
+<meta name="author" content="Cynthia Huang">
+<meta name="date" content="2022-11-18">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="prev" href="index.html">
+<link rel="next" href="package-setup.html">
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script><link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet">
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet">
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet">
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script><style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<style type="text/css">fieldset.chunkfield {border:1px dotted black;padding-bottom: 0px;padding-top: 0px;margin:0 2px;padding:.35em .625em .75em}
+    legend.chunklegend {padding:0;width:auto;border:0; border-bottom: none; margin-bottom:0}
+    </style>
+</head>
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation"><ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="documentation-functions.html"><a href="documentation-functions.html"><i class="fa fa-check"></i><b>2</b> Documentation Functions</a></li>
+<li class="chapter" data-level="3" data-path="package-setup.html">
+<a href="package-setup.html"><i class="fa fa-check"></i><b>3</b> Package setup</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="package-setup.html"><a href="package-setup.html#dependencies"><i class="fa fa-check"></i><b>3.1</b> Dependencies</a></li>
+<li class="chapter" data-level="3.2" data-path="package-setup.html"><a href="package-setup.html#utilities"><i class="fa fa-check"></i><b>3.2</b> Utilities</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="4" data-path="functions.html">
+<a href="functions.html"><i class="fa fa-check"></i><b>4</b> Functions</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="functions.html"><a href="functions.html#inbox"><i class="fa fa-check"></i><b>4.1</b> Inbox</a></li>
+<li class="chapter" data-level="4.2" data-path="functions.html">
+<a href="functions.html#panel-map-concepts"><i class="fa fa-check"></i><b>4.2</b> Panel Map Concepts</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="functions.html"><a href="functions.html#toy-example-setup"><i class="fa fa-check"></i><b>4.2.1</b> Toy Example Setup</a></li>
+<li class="chapter" data-level="4.2.2" data-path="functions.html"><a href="functions.html#panel-maps-as-matrices"><i class="fa fa-check"></i><b>4.2.2</b> Panel Maps as Matrices</a></li>
+<li class="chapter" data-level="4.2.3" data-path="functions.html"><a href="functions.html#panel-maps-as-graphs"><i class="fa fa-check"></i><b>4.2.3</b> Panel Maps as Graphs</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="4.3" data-path="functions.html">
+<a href="functions.html#generate-default-mapping-weights"><i class="fa fa-check"></i><b>4.3</b> Generate Default Mapping Weights</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="functions.html"><a href="functions.html#equal-weights"><i class="fa fa-check"></i><b>4.3.1</b> Equal Weights</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="4.4" data-path="functions.html">
+<a href="functions.html#valid-panel-maps"><i class="fa fa-check"></i><b>4.4</b> Valid Panel Maps</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="functions.html"><a href="functions.html#complete-weights"><i class="fa fa-check"></i><b>4.4.1</b> Complete Weights</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="4.5" data-path="functions.html">
+<a href="functions.html#valid-transformations"><i class="fa fa-check"></i><b>4.5</b> Valid Transformations</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="functions.html"><a href="functions.html#source-code-coverage"><i class="fa fa-check"></i><b>4.5.1</b> Source Code Coverage</a></li>
+<li class="chapter" data-level="4.5.2" data-path="functions.html"><a href="functions.html#no-missing-values"><i class="fa fa-check"></i><b>4.5.2</b> No Missing Values</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="4.6" data-path="functions.html">
+<a href="functions.html#use-panel-map-on-data"><i class="fa fa-check"></i><b>4.6</b> Use Panel Map on Data</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="functions.html"><a href="functions.html#transformation-function"><i class="fa fa-check"></i><b>4.6.1</b> Transformation Function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="chapter" data-level="5" data-path="conclude.html"><a href="conclude.html"><i class="fa fa-check"></i><b>5</b> Conclusion</a></li>
+</ul></nav>
+</div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Creating the <code>bdconformr</code> R package</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-"><div id="documentation-functions" class="section level1 hasAnchor" number="2">
+<h1>
+<span class="header-section-number">2</span> Documentation Functions<a href="documentation-functions.html#documentation-functions" class="anchor-section" aria-label="Anchor link to header"></a>
+</h1>
+<p>These functions are used to generate plots and other explanatory assets:</p>
+<p>To convert a panel map into a Matrix</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="documentation-functions.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert an incidence table from long form to an incidence matrix</span></span>
+<span id="cb2-2"><a href="documentation-functions.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span id="inc_long_to_mtx">inc_long_to_mtx</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(inc_long, to, weights){</span>
+<span id="cb2-3"><a href="documentation-functions.html#cb2-3" aria-hidden="true" tabindex="-1"></a>  inc_wide <span class="ot">&lt;-</span> inc_long <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="documentation-functions.html#cb2-4" aria-hidden="true" tabindex="-1"></a>    tidyr<span class="sc">::</span><span class="fu">pivot_wider</span>(<span class="at">names_from =</span> {{to}}, <span class="at">values_from =</span> {{weights}})</span>
+<span id="cb2-5"><a href="documentation-functions.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-6"><a href="documentation-functions.html#cb2-6" aria-hidden="true" tabindex="-1"></a>  inc_mtx <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(inc_wide[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb2-7"><a href="documentation-functions.html#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dimnames</span>(inc_mtx)[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> inc_wide[,<span class="dv">1</span>, drop<span class="ot">=</span><span class="cn">TRUE</span>]</span>
+<span id="cb2-8"><a href="documentation-functions.html#cb2-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-9"><a href="documentation-functions.html#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(inc_mtx)</span>
+<span id="cb2-10"><a href="documentation-functions.html#cb2-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>To plot an incidence matrix (without weights):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="documentation-functions.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span id="plt_inc_long_mtx">plt_inc_long_mtx</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(inc_long, to, from, weights) {</span>
+<span id="cb3-2"><a href="documentation-functions.html#cb3-2" aria-hidden="true" tabindex="-1"></a>  gg <span class="ot">&lt;-</span> inc_long <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="documentation-functions.html#cb3-3" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">src_case =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb3-4"><a href="documentation-functions.html#cb3-4" aria-hidden="true" tabindex="-1"></a>      {{weights}}<span class="sc">==</span><span class="dv">1</span> <span class="sc">~</span> <span class="st">"one-to-one"</span>,</span>
+<span id="cb3-5"><a href="documentation-functions.html#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">is.na</span>({{weights}}) <span class="sc">~</span> <span class="st">"none"</span>,</span>
+<span id="cb3-6"><a href="documentation-functions.html#cb3-6" aria-hidden="true" tabindex="-1"></a>      {{weights}} <span class="sc">&lt;</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"one-to-many"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb3-7"><a href="documentation-functions.html#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>{{to}}, <span class="at">y=</span>{{from}})) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="documentation-functions.html#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_tile</span>(<span class="fu">aes</span>(<span class="at">fill=</span>src_case), <span class="at">col=</span><span class="st">"grey"</span>) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="documentation-functions.html#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_discrete</span>(<span class="at">limits=</span>rev) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="documentation-functions.html#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_discrete</span>(<span class="at">position=</span><span class="st">'top'</span>) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="documentation-functions.html#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_brewer</span>() <span class="sc">+</span></span>
+<span id="cb3-12"><a href="documentation-functions.html#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_fixed</span>()  <span class="sc">+</span></span>
+<span id="cb3-13"><a href="documentation-functions.html#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">element_blank</span>(), <span class="at">y =</span> <span class="fu">element_blank</span>(), <span class="at">fill=</span><span class="st">"source-to-target"</span>) <span class="sc">+</span></span>
+<span id="cb3-14"><a href="documentation-functions.html#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
+<span id="cb3-15"><a href="documentation-functions.html#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(gg)</span>
+<span id="cb3-16"><a href="documentation-functions.html#cb3-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>To add labels for weights:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="documentation-functions.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_text</span>(<span class="at">data =</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(inc_long, <span class="sc">!</span><span class="fu">is.na</span>(weight)), <span class="fu">aes</span>(<span class="at">label=</span><span class="fu">round</span>(weight, <span class="dv">2</span>)))</span></code></pre></div>
+<p>To plot dataframe as ggplot “matrix”:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="documentation-functions.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span id="plt_df_mtx">plt_df_mtx</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(x, cols_from, row_names){</span>
+<span id="cb5-2"><a href="documentation-functions.html#cb5-2" aria-hidden="true" tabindex="-1"></a>  x <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="documentation-functions.html#cb5-3" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>({{row_names}}, {{cols_from}}) <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="documentation-functions.html#cb5-4" aria-hidden="true" tabindex="-1"></a>    tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>({{cols_from}}, </span>
+<span id="cb5-5"><a href="documentation-functions.html#cb5-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">names_to =</span> <span class="st">"var"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-6"><a href="documentation-functions.html#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>var, <span class="at">y=</span>{{row_names}})) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="documentation-functions.html#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_tile</span>(<span class="fu">aes</span>(<span class="at">fill=</span>var), <span class="at">col=</span><span class="st">"grey"</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="documentation-functions.html#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label=</span><span class="fu">round</span>(value, <span class="dv">2</span>)), <span class="at">size=</span><span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="documentation-functions.html#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_discrete</span>(<span class="at">limits=</span>rev) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="documentation-functions.html#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_discrete</span>(<span class="at">position=</span><span class="st">'top'</span>) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="documentation-functions.html#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_brewer</span>(<span class="at">palette=</span><span class="st">"Greens"</span>) <span class="sc">+</span></span>
+<span id="cb5-12"><a href="documentation-functions.html#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_fixed</span>()  <span class="sc">+</span></span>
+<span id="cb5-13"><a href="documentation-functions.html#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">element_blank</span>(), <span class="at">y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb5-14"><a href="documentation-functions.html#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-15"><a href="documentation-functions.html#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>)</span>
+<span id="cb5-16"><a href="documentation-functions.html#cb5-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>To plot a sigmoid plot of a panel map:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="documentation-functions.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggbump)</span>
+<span id="cb6-2"><a href="documentation-functions.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb6-3"><a href="documentation-functions.html#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb6-4"><a href="documentation-functions.html#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="documentation-functions.html#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot an incidence table (expanded panel map) as a ggplot sigmoid plot</span></span>
+<span id="cb6-6"><a href="documentation-functions.html#cb6-6" aria-hidden="true" tabindex="-1"></a><span id="plt_pm_sigmoid">plt_pm_sigmoid</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(pm, from, to, weights){</span>
+<span id="cb6-7"><a href="documentation-functions.html#cb6-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-8"><a href="documentation-functions.html#cb6-8" aria-hidden="true" tabindex="-1"></a>  edges <span class="ot">&lt;-</span> pm <span class="sc">|&gt;</span></span>
+<span id="cb6-9"><a href="documentation-functions.html#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">transmute</span>(<span class="at">from =</span> {{from}}, <span class="at">to =</span> {{to}}, <span class="at">weighted =</span> {{weights}})  </span>
+<span id="cb6-10"><a href="documentation-functions.html#cb6-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-11"><a href="documentation-functions.html#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="do">## calculate positions for nodes</span></span>
+<span id="cb6-12"><a href="documentation-functions.html#cb6-12" aria-hidden="true" tabindex="-1"></a>  from_nodes <span class="ot">&lt;-</span> <span class="fu">distinct</span>(edges, from) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">from_y =</span> <span class="fu">row_number</span>())</span>
+<span id="cb6-13"><a href="documentation-functions.html#cb6-13" aria-hidden="true" tabindex="-1"></a>  to_nodes <span class="ot">&lt;-</span> <span class="fu">distinct</span>(edges, to) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">to_y =</span> <span class="fu">row_number</span>() <span class="sc">-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="fl">0.5</span>)</span>
+<span id="cb6-14"><a href="documentation-functions.html#cb6-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-15"><a href="documentation-functions.html#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="do">## generate df for ggplot</span></span>
+<span id="cb6-16"><a href="documentation-functions.html#cb6-16" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> edges <span class="sc">|&gt;</span></span>
+<span id="cb6-17"><a href="documentation-functions.html#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="do">## generate mapping type/case variables</span></span>
+<span id="cb6-18"><a href="documentation-functions.html#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(from) <span class="sc">|&gt;</span> </span>
+<span id="cb6-19"><a href="documentation-functions.html#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">n_dest =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb6-20"><a href="documentation-functions.html#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb6-21"><a href="documentation-functions.html#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(to) <span class="sc">|&gt;</span> </span>
+<span id="cb6-22"><a href="documentation-functions.html#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">n_origin =</span> <span class="fu">n</span>(),</span>
+<span id="cb6-23"><a href="documentation-functions.html#cb6-23" aria-hidden="true" tabindex="-1"></a>           <span class="at">min_weight =</span> <span class="fu">min</span>(weighted)) <span class="sc">|&gt;</span></span>
+<span id="cb6-24"><a href="documentation-functions.html#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb6-25"><a href="documentation-functions.html#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">value_case =</span> <span class="fu">case_when</span>(n_dest <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"one-to-one"</span>,</span>
+<span id="cb6-26"><a href="documentation-functions.html#cb6-26" aria-hidden="true" tabindex="-1"></a>                                  n_dest <span class="sc">&gt;</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"one-to-many"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-27"><a href="documentation-functions.html#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="fu">tribble</span>(<span class="sc">~</span>value_case, <span class="sc">~</span>line_type, <span class="sc">~</span>font_type,</span>
+<span id="cb6-28"><a href="documentation-functions.html#cb6-28" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"one-to-one"</span>, <span class="st">"solid"</span>, <span class="st">"bold"</span>,</span>
+<span id="cb6-29"><a href="documentation-functions.html#cb6-29" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"one-to-many"</span>, <span class="st">"dashed"</span>, <span class="st">"italic"</span>),</span>
+<span id="cb6-30"><a href="documentation-functions.html#cb6-30" aria-hidden="true" tabindex="-1"></a>              <span class="at">by =</span> <span class="st">"value_case"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-31"><a href="documentation-functions.html#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">from_case =</span> <span class="fu">case_when</span>(n_origin <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"one-from-one"</span>,</span>
+<span id="cb6-32"><a href="documentation-functions.html#cb6-32" aria-hidden="true" tabindex="-1"></a>                                 n_origin <span class="sc">&gt;</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"one-from-many"</span>,</span>
+<span id="cb6-33"><a href="documentation-functions.html#cb6-33" aria-hidden="true" tabindex="-1"></a>                                 n_origin <span class="sc">&lt;</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"ERROR! origin codes &lt; 1"</span>),</span>
+<span id="cb6-34"><a href="documentation-functions.html#cb6-34" aria-hidden="true" tabindex="-1"></a>           <span class="at">dest_case =</span> <span class="fu">case_when</span>(min_weight <span class="sc">&lt;</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"contains split"</span>,</span>
+<span id="cb6-35"><a href="documentation-functions.html#cb6-35" aria-hidden="true" tabindex="-1"></a>                                 min_weight <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"aggregation only"</span>,</span>
+<span id="cb6-36"><a href="documentation-functions.html#cb6-36" aria-hidden="true" tabindex="-1"></a>                                 min_weight <span class="sc">&gt;</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"ERROR! weight &gt; 1"</span>)</span>
+<span id="cb6-37"><a href="documentation-functions.html#cb6-37" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span> </span>
+<span id="cb6-38"><a href="documentation-functions.html#cb6-38" aria-hidden="true" tabindex="-1"></a>    <span class="do">## add y-coordinates</span></span>
+<span id="cb6-39"><a href="documentation-functions.html#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(from_nodes, <span class="at">by =</span> <span class="st">"from"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-40"><a href="documentation-functions.html#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(to_nodes, <span class="at">by =</span> <span class="st">"to"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-41"><a href="documentation-functions.html#cb6-41" aria-hidden="true" tabindex="-1"></a>    <span class="do">## add x-coordinates</span></span>
+<span id="cb6-42"><a href="documentation-functions.html#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">from_x =</span> <span class="dv">0</span>,</span>
+<span id="cb6-43"><a href="documentation-functions.html#cb6-43" aria-hidden="true" tabindex="-1"></a>           <span class="at">to_x =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb6-44"><a href="documentation-functions.html#cb6-44" aria-hidden="true" tabindex="-1"></a>    <span class="do">## give each from-out instruction a unique id</span></span>
+<span id="cb6-45"><a href="documentation-functions.html#cb6-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">idx =</span> <span class="fu">row_number</span>())</span>
+<span id="cb6-46"><a href="documentation-functions.html#cb6-46" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-47"><a href="documentation-functions.html#cb6-47" aria-hidden="true" tabindex="-1"></a>plt_uw <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb6-48"><a href="documentation-functions.html#cb6-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> from_x, <span class="at">xend =</span> to_x, <span class="at">y =</span> from_y, <span class="at">yend =</span> to_y, <span class="at">group =</span> idx)) <span class="sc">+</span></span>
+<span id="cb6-49"><a href="documentation-functions.html#cb6-49" aria-hidden="true" tabindex="-1"></a>  <span class="do">## edges as sigmoid curves with line type</span></span>
+<span id="cb6-50"><a href="documentation-functions.html#cb6-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sigmoid</span>(<span class="fu">aes</span>(<span class="at">linetype =</span> <span class="fu">I</span>(line_type))) <span class="sc">+</span></span>
+<span id="cb6-51"><a href="documentation-functions.html#cb6-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to/from nodes</span></span>
+<span id="cb6-52"><a href="documentation-functions.html#cb6-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb6-53"><a href="documentation-functions.html#cb6-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> from_x <span class="sc">-</span> <span class="fl">0.5</span>, <span class="at">label=</span>from, <span class="at">fontface=</span><span class="fu">I</span>(font_type))) <span class="sc">+</span></span>
+<span id="cb6-54"><a href="documentation-functions.html#cb6-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="fu">aes</span>(<span class="at">x =</span> to_x <span class="sc">+</span> <span class="fl">0.5</span>, <span class="at">y =</span> to_y, <span class="at">label=</span>to, <span class="at">fill =</span> dest_case)) <span class="sc">+</span></span>
+<span id="cb6-55"><a href="documentation-functions.html#cb6-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># edge labels</span></span>
+<span id="cb6-56"><a href="documentation-functions.html#cb6-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="at">data =</span> <span class="fu">filter</span>(df, value_case <span class="sc">==</span> <span class="st">"one-to-many"</span>),</span>
+<span id="cb6-57"><a href="documentation-functions.html#cb6-57" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> (((from_x <span class="sc">+</span> to_x) <span class="sc">/</span> <span class="dv">2</span>) <span class="sc">+</span> to_x) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb6-58"><a href="documentation-functions.html#cb6-58" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> to_y,</span>
+<span id="cb6-59"><a href="documentation-functions.html#cb6-59" aria-hidden="true" tabindex="-1"></a>                 <span class="at">label =</span> weighted)) <span class="sc">+</span></span>
+<span id="cb6-60"><a href="documentation-functions.html#cb6-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="at">data =</span> <span class="fu">filter</span>(df, value_case <span class="sc">==</span> <span class="st">"one-to-one"</span>),</span>
+<span id="cb6-61"><a href="documentation-functions.html#cb6-61" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> (from_x <span class="sc">+</span> to_x) <span class="sc">/</span> <span class="dv">4</span>,</span>
+<span id="cb6-62"><a href="documentation-functions.html#cb6-62" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> from_y,</span>
+<span id="cb6-63"><a href="documentation-functions.html#cb6-63" aria-hidden="true" tabindex="-1"></a>                 <span class="at">label =</span> weighted)) <span class="sc">+</span></span>
+<span id="cb6-64"><a href="documentation-functions.html#cb6-64" aria-hidden="true" tabindex="-1"></a>  <span class="co"># theme</span></span>
+<span id="cb6-65"><a href="documentation-functions.html#cb6-65" aria-hidden="true" tabindex="-1"></a>  cowplot<span class="sc">::</span><span class="fu">theme_minimal_grid</span>(<span class="at">font_size =</span> <span class="dv">14</span>, <span class="at">line_size =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb6-66"><a href="documentation-functions.html#cb6-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb6-67"><a href="documentation-functions.html#cb6-67" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-68"><a href="documentation-functions.html#cb6-68" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-69"><a href="documentation-functions.html#cb6-69" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-70"><a href="documentation-functions.html#cb6-70" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>)) <span class="sc">+</span></span>
+<span id="cb6-71"><a href="documentation-functions.html#cb6-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">fill =</span> <span class="st">"target-from-sources"</span>)</span>
+<span id="cb6-72"><a href="documentation-functions.html#cb6-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-73"><a href="documentation-functions.html#cb6-73" aria-hidden="true" tabindex="-1"></a><span class="fu">return</span>(plt_uw)</span>
+<span id="cb6-74"><a href="documentation-functions.html#cb6-74" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-75"><a href="documentation-functions.html#cb6-75" aria-hidden="true" tabindex="-1"></a></span></code></pre></div>
+<pre><code>## 
+## Attaching package: 'dplyr'</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+
+</div>
+            </section>
+</div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="package-setup.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script><script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script><script src="libs/gitbook-2.6.7/js/plugin-search.js"></script><script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script><script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script><script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script><script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script><script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script><script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+</html>

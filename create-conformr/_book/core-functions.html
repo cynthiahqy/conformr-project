@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>4 Core Functions | Creating the conformr R package</title>
+<meta name="description" content="4 Core Functions | Creating the conformr R package">
+<meta name="generator" content="bookdown 0.39 and GitBook 2.6.7">
+<meta property="og:title" content="4 Core Functions | Creating the conformr R package">
+<meta property="og:type" content="book">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="4 Core Functions | Creating the conformr R package">
+<meta name="author" content="Cynthia Huang">
+<meta name="date" content="2024-07-01">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="prev" href="package-setup.html">
+<link rel="next" href="package-datasets.html">
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script><link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet">
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet">
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet">
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet">
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script><style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">fieldset.chunkfield {border:1px dotted black;padding-bottom: 0px;padding-top: 0px;margin:0 2px;padding:.35em .625em .75em}
+    legend.chunklegend {padding:0;width:auto;border:0; border-bottom: none; margin-bottom:0}
+    </style>
+</head>
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation"><ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html">
+<a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#documentation-functions"><i class="fa fa-check"></i><b>1.1</b> Documentation Functions</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="2" data-path="package-design-notes.html">
+<a href="package-design-notes.html"><i class="fa fa-check"></i><b>2</b> Package Design Notes</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="package-design-notes.html">
+<a href="package-design-notes.html#example-dataset-designs"><i class="fa fa-check"></i><b>2.1</b> Example Dataset Designs</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="package-design-notes.html"><a href="package-design-notes.html#indstat-across-isic-standards"><i class="fa fa-check"></i><b>2.1.1</b> INDSTAT across ISIC standards</a></li>
+<li class="chapter" data-level="2.1.2" data-path="package-design-notes.html"><a href="package-design-notes.html#wtocomtrade-data-across-harmonised-system-versions"><i class="fa fa-check"></i><b>2.1.2</b> WTO/ComTrade Data across Harmonised System versions</a></li>
+<li class="chapter" data-level="2.1.3" data-path="package-design-notes.html"><a href="package-design-notes.html#abs-labor-force-statistics-across-anzsco"><i class="fa fa-check"></i><b>2.1.3</b> ABS labor force statistics across ANZSCO</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="2.2" data-path="package-design-notes.html">
+<a href="package-design-notes.html#existing-implementations-and-approaches"><i class="fa fa-check"></i><b>2.2</b> Existing Implementations and Approaches</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="package-design-notes.html"><a href="package-design-notes.html#hadley_data-fuel-economy"><i class="fa fa-check"></i><b>2.2.1</b> hadley_data-fuel-economy</a></li>
+<li class="chapter" data-level="2.2.2" data-path="package-design-notes.html"><a href="package-design-notes.html#schott_stata-trade-concordance"><i class="fa fa-check"></i><b>2.2.2</b> schott_stata-trade-concordance</a></li>
+<li class="chapter" data-level="2.2.3" data-path="package-design-notes.html"><a href="package-design-notes.html#kolczynska_trust-in-institutions"><i class="fa fa-check"></i><b>2.2.3</b> kolczynska_trust-in-institutions</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="2.3" data-path="package-design-notes.html">
+<a href="package-design-notes.html#existing-crosswalk-packages"><i class="fa fa-check"></i><b>2.3</b> Existing Crosswalk Packages</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="package-design-notes.html"><a href="package-design-notes.html#countrycode_look-up-tables"><i class="fa fa-check"></i><b>2.3.1</b> countrycode_look-up-tables</a></li>
+<li class="chapter" data-level="2.3.2" data-path="package-design-notes.html"><a href="package-design-notes.html#concordance_look-up-tables"><i class="fa fa-check"></i><b>2.3.2</b> concordance_look-up-tables</a></li>
+<li class="chapter" data-level="2.3.3" data-path="package-design-notes.html"><a href="package-design-notes.html#debkeepr_non-decimal-currencies"><i class="fa fa-check"></i><b>2.3.3</b> debkeepr_non-decimal-currencies</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="chapter" data-level="3" data-path="package-setup.html">
+<a href="package-setup.html"><i class="fa fa-check"></i><b>3</b> Package setup</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="package-setup.html"><a href="package-setup.html#dependencies"><i class="fa fa-check"></i><b>3.1</b> Dependencies</a></li>
+<li class="chapter" data-level="3.2" data-path="package-setup.html"><a href="package-setup.html#utilities"><i class="fa fa-check"></i><b>3.2</b> Utilities</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="4" data-path="core-functions.html">
+<a href="core-functions.html"><i class="fa fa-check"></i><b>4</b> Core Functions</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="core-functions.html"><a href="core-functions.html#setup-testing-data"><i class="fa fa-check"></i><b>4.1</b> Setup Testing Data</a></li>
+<li class="chapter" data-level="4.2" data-path="core-functions.html">
+<a href="core-functions.html#valid-transformation-conditions"><i class="fa fa-check"></i><b>4.2</b> Valid Transformation Conditions</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="core-functions.html"><a href="core-functions.html#complete-mapping-weights"><i class="fa fa-check"></i><b>4.2.1</b> Complete Mapping Weights</a></li>
+<li class="chapter" data-level="4.2.2" data-path="core-functions.html"><a href="core-functions.html#no-missing-data-values"><i class="fa fa-check"></i><b>4.2.2</b> No Missing Data Values</a></li>
+<li class="chapter" data-level="4.2.3" data-path="core-functions.html"><a href="core-functions.html#source-code-coverage"><i class="fa fa-check"></i><b>4.2.3</b> Source Code Coverage</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="4.3" data-path="core-functions.html">
+<a href="core-functions.html#use-panel-map-on-data"><i class="fa fa-check"></i><b>4.3</b> Use Panel Map on Data</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="core-functions.html"><a href="core-functions.html#single-step-concordance"><i class="fa fa-check"></i><b>4.3.1</b> Single Step Concordance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="chapter" data-level="5" data-path="package-datasets.html"><a href="package-datasets.html"><i class="fa fa-check"></i><b>5</b> Package Datasets</a></li>
+<li class="chapter" data-level="6" data-path="validation-helper-functions.html">
+<a href="validation-helper-functions.html"><i class="fa fa-check"></i><b>6</b> Validation Helper Functions</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="validation-helper-functions.html">
+<a href="validation-helper-functions.html#panel-map"><i class="fa fa-check"></i><b>6.1</b> Panel Map</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="validation-helper-functions.html"><a href="validation-helper-functions.html#generate-equal-weights"><i class="fa fa-check"></i><b>6.1.1</b> Generate Equal Weights</a></li>
+<li class="chapter" data-level="6.1.2" data-path="validation-helper-functions.html"><a href="validation-helper-functions.html#get-bad-weights-tbc"><i class="fa fa-check"></i><b>6.1.2</b> Get Bad Weights (TBC)</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="6.2" data-path="validation-helper-functions.html"><a href="validation-helper-functions.html#data-preparation-for-concordance-transformation"><i class="fa fa-check"></i><b>6.2</b> Data Preparation for Concordance Transformation</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="7" data-path="workflows-and-extensions.html">
+<a href="workflows-and-extensions.html"><i class="fa fa-check"></i><b>7</b> Workflows and Extensions</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#related-nomenclature-variables"><i class="fa fa-check"></i><b>7.1</b> Related Nomenclature Variables</a></li>
+<li class="chapter" data-level="7.2" data-path="workflows-and-extensions.html">
+<a href="workflows-and-extensions.html#multiple-transformations"><i class="fa fa-check"></i><b>7.2</b> Multiple Transformations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#multi-step-transformation-wip"><i class="fa fa-check"></i><b>7.2.1</b> Multi-Step Transformation (WIP)</a></li>
+<li class="chapter" data-level="7.2.2" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#multi-group-transformations-wip"><i class="fa fa-check"></i><b>7.2.2</b> Multi-Group Transformations (WIP)</a></li>
+<li class="chapter" data-level="7.2.3" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#mutli-map-group-transformations-wip"><i class="fa fa-check"></i><b>7.2.3</b> Mutli-Map-Group Transformations (WIP)</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="7.3" data-path="workflows-and-extensions.html">
+<a href="workflows-and-extensions.html#visualising-panel-map-representations"><i class="fa fa-check"></i><b>7.3</b> Visualising Panel Map Representations</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#panel-maps-as-graphs"><i class="fa fa-check"></i><b>7.3.1</b> Panel Maps as Graphs</a></li>
+</ul>
+</li>
+<li class="chapter" data-level="7.4" data-path="workflows-and-extensions.html">
+<a href="workflows-and-extensions.html#custom-mapping-weights"><i class="fa fa-check"></i><b>7.4</b> Custom Mapping Weights</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#manual-design-and-encoding"><i class="fa fa-check"></i><b>7.4.1</b> Manual Design and Encoding</a></li>
+<li class="chapter" data-level="7.4.2" data-path="workflows-and-extensions.html"><a href="workflows-and-extensions.html#use-reference-proportions"><i class="fa fa-check"></i><b>7.4.2</b> Use Reference Proportions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="chapter" data-level="8" data-path="conclude.html">
+<a href="conclude.html"><i class="fa fa-check"></i><b>8</b> Conclusion</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="conclude.html"><a href="conclude.html#write-internal-data-to-package"><i class="fa fa-check"></i><b>8.1</b> Write internal data to package</a></li>
+<li class="chapter" data-level="8.2" data-path="conclude.html"><a href="conclude.html#document-the-package"><i class="fa fa-check"></i><b>8.2</b> Document the package</a></li>
+<li class="chapter" data-level="8.3" data-path="conclude.html"><a href="conclude.html#include-pacakge-readme.md"><i class="fa fa-check"></i><b>8.3</b> Include pacakge README.md</a></li>
+</ul>
+</li>
+</ul></nav>
+</div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Creating the <code>conformr</code> R package</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-"><div id="core-functions" class="section level1 hasAnchor" number="4">
+<h1>
+<span class="header-section-number">4</span> Core Functions<a href="core-functions.html#core-functions" class="anchor-section" aria-label="Anchor link to header"></a>
+</h1>
+<div id="setup-testing-data" class="section level2 hasAnchor" number="4.1">
+<h2>
+<span class="header-section-number">4.1</span> Setup Testing Data<a href="core-functions.html#setup-testing-data" class="anchor-section" aria-label="Anchor link to header"></a>
+</h2>
+<p>Define a toy example to use in development:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="core-functions.html#cb21-1" tabindex="-1"></a><span class="do">## correspondence/concordance table</span></span>
+<span id="cb21-2"><a href="core-functions.html#cb21-2" tabindex="-1"></a>codes_BA <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">tribble</span>(<span class="sc">~</span> std_B, <span class="sc">~</span> std_A,</span>
+<span id="cb21-3"><a href="core-functions.html#cb21-3" tabindex="-1"></a>                                <span class="st">"A1"</span>, <span class="st">"x1111"</span>, <span class="co"># one-to-one</span></span>
+<span id="cb21-4"><a href="core-functions.html#cb21-4" tabindex="-1"></a>                                <span class="st">"B2"</span>, <span class="st">"x2222"</span>, <span class="co"># many-to-one</span></span>
+<span id="cb21-5"><a href="core-functions.html#cb21-5" tabindex="-1"></a>                                <span class="st">"B2"</span>, <span class="st">"x3333"</span>,</span>
+<span id="cb21-6"><a href="core-functions.html#cb21-6" tabindex="-1"></a>                                <span class="st">"C3"</span>, <span class="st">"x4444"</span>, <span class="co"># one-to-many (4)</span></span>
+<span id="cb21-7"><a href="core-functions.html#cb21-7" tabindex="-1"></a>                                <span class="st">"C4"</span>, <span class="st">"x4444"</span>,</span>
+<span id="cb21-8"><a href="core-functions.html#cb21-8" tabindex="-1"></a>                                <span class="st">"C4"</span>, <span class="st">"x6666"</span>, <span class="co"># many-to-many</span></span>
+<span id="cb21-9"><a href="core-functions.html#cb21-9" tabindex="-1"></a>                                <span class="st">"C5"</span>, <span class="st">"x4444"</span>,</span>
+<span id="cb21-10"><a href="core-functions.html#cb21-10" tabindex="-1"></a>                                <span class="st">"C6"</span>, <span class="st">"x4444"</span>,</span>
+<span id="cb21-11"><a href="core-functions.html#cb21-11" tabindex="-1"></a>                                <span class="st">"C7"</span>, <span class="st">"x5555"</span>, <span class="co"># one-to-many (3)</span></span>
+<span id="cb21-12"><a href="core-functions.html#cb21-12" tabindex="-1"></a>                                <span class="st">"C8"</span>, <span class="st">"x5555"</span>,</span>
+<span id="cb21-13"><a href="core-functions.html#cb21-13" tabindex="-1"></a>                           )</span>
+<span id="cb21-14"><a href="core-functions.html#cb21-14" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="core-functions.html#cb21-15" tabindex="-1"></a><span class="do">## panel_map</span></span>
+<span id="cb21-16"><a href="core-functions.html#cb21-16" tabindex="-1"></a>weights_BA <span class="ot">&lt;-</span> codes_BA <span class="sc">|&gt;</span></span>
+<span id="cb21-17"><a href="core-functions.html#cb21-17" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>(std_B, std_A) <span class="sc">|&gt;</span></span>
+<span id="cb21-18"><a href="core-functions.html#cb21-18" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(std_A) <span class="sc">|&gt;</span></span>
+<span id="cb21-19"><a href="core-functions.html#cb21-19" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">n_dest =</span> dplyr<span class="sc">::</span><span class="fu">n</span>(),</span>
+<span id="cb21-20"><a href="core-functions.html#cb21-20" tabindex="-1"></a>                <span class="at">weight =</span> <span class="dv">1</span> <span class="sc">/</span> n_dest) <span class="sc">|&gt;</span></span>
+<span id="cb21-21"><a href="core-functions.html#cb21-21" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>()</span>
+<span id="cb21-22"><a href="core-functions.html#cb21-22" tabindex="-1"></a></span>
+<span id="cb21-23"><a href="core-functions.html#cb21-23" tabindex="-1"></a>pm_BA <span class="ot">&lt;-</span> weights_BA <span class="sc">|&gt;</span></span>
+<span id="cb21-24"><a href="core-functions.html#cb21-24" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(std_B, std_A, weight)</span></code></pre></div>
+<p>Write this data into an internal list for testing purposes.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="core-functions.html#cb22-1" tabindex="-1"></a>equal_pm <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"codes_BA"</span> <span class="ot">=</span> codes_BA,</span>
+<span id="cb22-2"><a href="core-functions.html#cb22-2" tabindex="-1"></a>                 <span class="st">"weights_BA"</span> <span class="ot">=</span> weights_BA,</span>
+<span id="cb22-3"><a href="core-functions.html#cb22-3" tabindex="-1"></a>                 <span class="st">"pm_BA"</span> <span class="ot">=</span> pm_BA)</span></code></pre></div>
+<p>We can visualise a panel map as the addition of weights to the concordance:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="core-functions.html#cb23-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb23-2"><a href="core-functions.html#cb23-2" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="core-functions.html#cb23-3" tabindex="-1"></a>inc_long <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">expand</span>(codes_BA, std_A, std_B) <span class="sc">|&gt;</span></span>
+<span id="cb23-4"><a href="core-functions.html#cb23-4" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(pm_BA, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"std_A"</span>, <span class="st">"std_B"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb23-5"><a href="core-functions.html#cb23-5" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">transmute</span>(<span class="at">to =</span> std_B, <span class="at">from =</span> std_A, <span class="at">weight =</span> weight)</span>
+<span id="cb23-6"><a href="core-functions.html#cb23-6" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="core-functions.html#cb23-7" tabindex="-1"></a>gg_inc_mtx <span class="ot">&lt;-</span> inc_long <span class="sc">|&gt;</span> </span>
+<span id="cb23-8"><a href="core-functions.html#cb23-8" tabindex="-1"></a>  <a href="index.html#plt_inc_long_mtx">plt_inc_long_mtx</a>(to, from, weight) <span class="sc">+</span></span>
+<span id="cb23-9"><a href="core-functions.html#cb23-9" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Concordance as Incidence Matrix"</span>)</span>
+<span id="cb23-10"><a href="core-functions.html#cb23-10" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="core-functions.html#cb23-11" tabindex="-1"></a>gg_pm_mtx <span class="ot">&lt;-</span> gg_inc_mtx <span class="sc">+</span> </span>
+<span id="cb23-12"><a href="core-functions.html#cb23-12" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(inc_long, <span class="sc">!</span><span class="fu">is.na</span>(weight)), <span class="fu">aes</span>(<span class="at">label=</span><span class="fu">round</span>(weight, <span class="dv">2</span>))) <span class="sc">+</span></span>
+<span id="cb23-13"><a href="core-functions.html#cb23-13" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"adding equal weights for Valid Panel Map"</span>)</span></code></pre></div>
+<div style="display: flex;">
+<div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="core-functions.html#cb24-1" tabindex="-1"></a>gg_inc_mtx</span></code></pre></div>
+<p><img src="_main_files/figure-html/gg-no-weight-martix-1.png" width="672"></p>
+</div>
+<div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="core-functions.html#cb25-1" tabindex="-1"></a>gg_pm_mtx</span></code></pre></div>
+<p><img src="_main_files/figure-html/gg-equal-weight-matrix-1.png" width="672"></p>
+</div>
+</div>
+</div>
+<div id="valid-transformation-conditions" class="section level2 hasAnchor" number="4.2">
+<h2>
+<span class="header-section-number">4.2</span> Valid Transformation Conditions<a href="core-functions.html#valid-transformation-conditions" class="anchor-section" aria-label="Anchor link to header"></a>
+</h2>
+<div id="complete-mapping-weights" class="section level3 hasAnchor" number="4.2.1">
+<h3>
+<span class="header-section-number">4.2.1</span> Complete Mapping Weights<a href="core-functions.html#complete-mapping-weights" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<p>A valid panel map is an mapping from source to target nomenclatures which when applied to suitably dimensioned source data, transforms that data into the target nomenclature without creation or loss of value (beyond floating point rounding). This can also be thought of as a condition whereby the sum total of a variable remains the same before and after the transformation.</p>
+<p>The following condition is necessary and sufficient for a set of Source Codes, Target Codes and Mapping Weights to be a valid panel map:</p>
+<blockquote>
+<p>The sum of all Mapping Weights associated with any given Source Code totals to 1</p>
+</blockquote>
+<p>To demonstrate, let us generate some source data:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="core-functions.html#cb26-1" tabindex="-1"></a><span class="do">## generate some data</span></span>
+<span id="cb26-2"><a href="core-functions.html#cb26-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1832</span>)</span>
+<span id="cb26-3"><a href="core-functions.html#cb26-3" tabindex="-1"></a>std_A_codes <span class="ot">&lt;-</span> <span class="fu">unique</span>(codes_BA<span class="sc">$</span>std_A)</span>
+<span id="cb26-4"><a href="core-functions.html#cb26-4" tabindex="-1"></a>(data_A <span class="ot">&lt;-</span> </span>
+<span id="cb26-5"><a href="core-functions.html#cb26-5" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">std_A =</span> std_A_codes,</span>
+<span id="cb26-6"><a href="core-functions.html#cb26-6" tabindex="-1"></a>                  <span class="at">A_100   =</span> <span class="dv">100</span>,</span>
+<span id="cb26-7"><a href="core-functions.html#cb26-7" tabindex="-1"></a>                  <span class="at">A_prod  =</span> <span class="fu">round</span>(<span class="fu">abs</span>(<span class="fu">rnorm</span>(<span class="fu">length</span>(std_A_codes)) <span class="sc">*</span> <span class="dv">10000</span>),<span class="dv">2</span>)</span>
+<span id="cb26-8"><a href="core-functions.html#cb26-8" tabindex="-1"></a>                  )</span>
+<span id="cb26-9"><a href="core-functions.html#cb26-9" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   std_A A_100 A_prod
+##   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1 x1111   100 15275.
+## 2 x2222   100  7432.
+## 3 x3333   100  1970.
+## 4 x4444   100   837.
+## 5 x6666   100  9976.
+## 6 x5555   100  1217.</code></pre>
+<p>Create more testing data.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="core-functions.html#cb28-1" tabindex="-1"></a>equal_pm<span class="sc">$</span>data_A <span class="ot">&lt;-</span> data_A <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="core-functions.html#cb28-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(std_A, A_100)</span></code></pre></div>
+<p>Now let’s switch to using the matrix representation of panel maps:</p>
+<p>Let <span class="math inline">\(\bf{C}\)</span> be a <span class="math inline">\(n \times m\)</span> matrix showing the incidence between two disjoint sets (<code>inc_mtx</code>), and let <span class="math inline">\(\bf{X}\)</span> be the source variables (<code>x_mtx</code>) requiring transformation. Then, the transformed data is <span class="math inline">\(\bf{Z} = \bf{C'X}\)</span>:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="core-functions.html#cb29-1" tabindex="-1"></a><span class="do">## incidence matrix</span></span>
+<span id="cb29-2"><a href="core-functions.html#cb29-2" tabindex="-1"></a>inc_mtx <span class="ot">&lt;-</span> inc_long <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="core-functions.html#cb29-3" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">weight=</span><span class="dv">0</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb29-4"><a href="core-functions.html#cb29-4" tabindex="-1"></a>  <a href="index.html#inc_long_to_mtx">inc_long_to_mtx</a>(to, weight)</span>
+<span id="cb29-5"><a href="core-functions.html#cb29-5" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="core-functions.html#cb29-6" tabindex="-1"></a><span class="do">## source data matrix</span></span>
+<span id="cb29-7"><a href="core-functions.html#cb29-7" tabindex="-1"></a>x_mtx <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(data_A[,<span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb29-8"><a href="core-functions.html#cb29-8" tabindex="-1"></a><span class="fu">dimnames</span>(x_mtx)[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> std_A_codes</span>
+<span id="cb29-9"><a href="core-functions.html#cb29-9" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="core-functions.html#cb29-10" tabindex="-1"></a><span class="do">## transformed data</span></span>
+<span id="cb29-11"><a href="core-functions.html#cb29-11" tabindex="-1"></a>z_mtx <span class="ot">&lt;-</span> <span class="fu">t</span>(inc_mtx) <span class="sc">%*%</span> x_mtx</span></code></pre></div>
+<div style="display: flex;">
+<div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="core-functions.html#cb30-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">t</span>(inc_mtx), <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##    x1111 x2222 x3333 x4444 x5555 x6666
+## A1     1     0     0  0.00   0.0     0
+## B2     0     1     1  0.00   0.0     0
+## C3     0     0     0  0.25   0.0     0
+## C4     0     0     0  0.25   0.0     1
+## C5     0     0     0  0.25   0.0     0
+## C6     0     0     0  0.25   0.0     0
+## C7     0     0     0  0.00   0.5     0
+## C8     0     0     0  0.00   0.5     0</code></pre>
+</div>
+<div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="core-functions.html#cb32-1" tabindex="-1"></a><span class="fu">print</span>(x_mtx)</span></code></pre></div>
+<pre><code>##       A_100   A_prod
+## x1111   100 15274.93
+## x2222   100  7431.98
+## x3333   100  1970.36
+## x4444   100   836.72
+## x6666   100  9976.27
+## x5555   100  1216.67</code></pre>
+</div>
+</div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="core-functions.html#cb34-1" tabindex="-1"></a><span class="fu">print</span>(z_mtx)</span></code></pre></div>
+<pre><code>##    A_100    A_prod
+## A1   100 15274.930
+## B2   200  9402.340
+## C3    25   209.180
+## C4   125  1425.850
+## C5    25   209.180
+## C6    25   209.180
+## C7    50  4988.135
+## C8    50  4988.135</code></pre>
+<p>Notice that the sum total of <code>A_100</code> is the same before and after the transformation.</p>
+<div style="display: flex;">
+<div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="core-functions.html#cb36-1" tabindex="-1"></a><span class="fu">colSums</span>(x_mtx)</span></code></pre></div>
+<pre><code>##    A_100   A_prod 
+##   600.00 36706.93</code></pre>
+</div>
+<div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="core-functions.html#cb38-1" tabindex="-1"></a><span class="fu">colSums</span>(z_mtx)</span></code></pre></div>
+<pre><code>##    A_100   A_prod 
+##   600.00 36706.93</code></pre>
+</div>
+</div>
+<p>Now, let’s edit the panel map such that the weights no longer sum to one:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="core-functions.html#cb40-1" tabindex="-1"></a><span class="do">## edit weights</span></span>
+<span id="cb40-2"><a href="core-functions.html#cb40-2" tabindex="-1"></a>bad_pm <span class="ot">&lt;-</span> pm_BA <span class="sc">|&gt;</span> </span>
+<span id="cb40-3"><a href="core-functions.html#cb40-3" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">weight =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb40-4"><a href="core-functions.html#cb40-4" tabindex="-1"></a>                           weight <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> weight,</span>
+<span id="cb40-5"><a href="core-functions.html#cb40-5" tabindex="-1"></a>                           weight <span class="sc">&lt;</span> <span class="fl">0.5</span> <span class="sc">~</span> weight <span class="sc">-</span> <span class="fl">0.03</span>,</span>
+<span id="cb40-6"><a href="core-functions.html#cb40-6" tabindex="-1"></a>                           weight <span class="sc">&gt;=</span> <span class="fl">0.5</span> <span class="sc">~</span> weight <span class="sc">+</span> <span class="fl">0.01</span>,</span>
+<span id="cb40-7"><a href="core-functions.html#cb40-7" tabindex="-1"></a>                           T <span class="sc">~</span> weight))</span>
+<span id="cb40-8"><a href="core-functions.html#cb40-8" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="core-functions.html#cb40-9" tabindex="-1"></a><span class="do">## incidence matrix</span></span>
+<span id="cb40-10"><a href="core-functions.html#cb40-10" tabindex="-1"></a>bad_mtx <span class="ot">&lt;-</span> bad_pm <span class="sc">|&gt;</span></span>
+<span id="cb40-11"><a href="core-functions.html#cb40-11" tabindex="-1"></a>  <a href="index.html#inc_long_to_mtx">inc_long_to_mtx</a>(std_B, weight)</span>
+<span id="cb40-12"><a href="core-functions.html#cb40-12" tabindex="-1"></a>bad_mtx[<span class="fu">is.na</span>(bad_mtx)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb40-13"><a href="core-functions.html#cb40-13" tabindex="-1"></a></span>
+<span id="cb40-14"><a href="core-functions.html#cb40-14" tabindex="-1"></a><span class="do">## transform data badly</span></span>
+<span id="cb40-15"><a href="core-functions.html#cb40-15" tabindex="-1"></a>bad_z <span class="ot">&lt;-</span> <span class="fu">t</span>(bad_mtx) <span class="sc">%*%</span> x_mtx</span></code></pre></div>
+<p>Notice what happens when we apply the transformation:</p>
+<div style="display: flex;">
+<div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="core-functions.html#cb41-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">t</span>(bad_mtx), <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##    x1111 x2222 x3333 x4444 x6666 x5555
+## A1     1     0     0  0.00     0  0.00
+## B2     0     1     1  0.00     0  0.00
+## C3     0     0     0  0.22     0  0.00
+## C4     0     0     0  0.22     1  0.00
+## C5     0     0     0  0.22     0  0.00
+## C6     0     0     0  0.22     0  0.00
+## C7     0     0     0  0.00     0  0.51
+## C8     0     0     0  0.00     0  0.51</code></pre>
+</div>
+<div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="core-functions.html#cb43-1" tabindex="-1"></a><span class="fu">print</span>(x_mtx)</span></code></pre></div>
+<pre><code>##       A_100   A_prod
+## x1111   100 15274.93
+## x2222   100  7431.98
+## x3333   100  1970.36
+## x4444   100   836.72
+## x6666   100  9976.27
+## x5555   100  1216.67</code></pre>
+</div>
+</div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="core-functions.html#cb45-1" tabindex="-1"></a><span class="fu">print</span>(bad_z)</span></code></pre></div>
+<pre><code>##    A_100     A_prod
+## A1   100 15274.9300
+## B2   200  9402.3400
+## C3    22   184.0784
+## C4   122 10160.3484
+## C5    22   184.0784
+## C6    22   184.0784
+## C7    51   620.5017
+## C8    51   620.5017</code></pre>
+<p>Notice that the sum totals are no longer the same before and after the transformation:</p>
+<div style="display: flex;">
+<div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="core-functions.html#cb47-1" tabindex="-1"></a><span class="fu">colSums</span>(x_mtx)</span></code></pre></div>
+<pre><code>##    A_100   A_prod 
+##   600.00 36706.93</code></pre>
+</div>
+<div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="core-functions.html#cb49-1" tabindex="-1"></a><span class="fu">colSums</span>(bad_z)</span></code></pre></div>
+<pre><code>##    A_100   A_prod 
+##   590.00 36630.86</code></pre>
+</div>
+</div>
+<p>Hence, the validity condition can also be expressed as follows: &gt; A given incidence matrix <span class="math inline">\(\bf{K}\)</span> with dimensions <span class="math inline">\(n \times m\)</span> is a valid panel map if and only if <span class="math inline">\(\bf{K}\boldsymbol{1} = \boldsymbol{1}\)</span> where <span class="math inline">\(\boldsymbol{1}\)</span> is a unit vector of length <span class="math inline">\(m\)</span>:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="core-functions.html#cb51-1" tabindex="-1"></a>ones <span class="ot">&lt;-</span> <span class="fu">rep_len</span>(<span class="dv">1</span>, <span class="fu">ncol</span>(inc_mtx))</span></code></pre></div>
+<div style="display: flex;">
+<div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="core-functions.html#cb52-1" tabindex="-1"></a><span class="fu">round</span>(inc_mtx, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##       A1 B2   C3   C4   C5   C6  C7  C8
+## x1111  1  0 0.00 0.00 0.00 0.00 0.0 0.0
+## x2222  0  1 0.00 0.00 0.00 0.00 0.0 0.0
+## x3333  0  1 0.00 0.00 0.00 0.00 0.0 0.0
+## x4444  0  0 0.25 0.25 0.25 0.25 0.0 0.0
+## x5555  0  0 0.00 0.00 0.00 0.00 0.5 0.5
+## x6666  0  0 0.00 1.00 0.00 0.00 0.0 0.0</code></pre>
+</div>
+<div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="core-functions.html#cb54-1" tabindex="-1"></a>inc_mtx <span class="sc">%*%</span> ones</span></code></pre></div>
+<pre><code>##       [,1]
+## x1111    1
+## x2222    1
+## x3333    1
+## x4444    1
+## x5555    1
+## x6666    1</code></pre>
+</div>
+</div>
+<div id="functions" class="section level4 hasAnchor" number="4.2.1.1">
+<h4>
+<span class="header-section-number">4.2.1.1</span> Functions<a href="core-functions.html#functions" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<p>Internal switching function for flow control and error messages</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="core-functions.html#cb56-1" tabindex="-1"></a><span class="co">#' Flag Bad Mapping Weights</span></span>
+<span id="cb56-2"><a href="core-functions.html#cb56-2" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb56-3"><a href="core-functions.html#cb56-3" tabindex="-1"></a><span id="has_bad_weights">has_bad_weights</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(df, code_in, code_out, weights){</span>
+<span id="cb56-4"><a href="core-functions.html#cb56-4" tabindex="-1"></a>  bad_rows <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb56-5"><a href="core-functions.html#cb56-5" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>({{code_in}}) <span class="sc">|&gt;</span></span>
+<span id="cb56-6"><a href="core-functions.html#cb56-6" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">total =</span> <span class="fu">sum</span>({{weights}}),</span>
+<span id="cb56-7"><a href="core-functions.html#cb56-7" tabindex="-1"></a>                     <span class="at">weights =</span> <span class="fu">paste</span>({{weights}}, <span class="at">collapse=</span><span class="st">","</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb56-8"><a href="core-functions.html#cb56-8" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(total <span class="sc">!=</span> <span class="dv">1</span>)</span>
+<span id="cb56-9"><a href="core-functions.html#cb56-9" tabindex="-1"></a>  </span>
+<span id="cb56-10"><a href="core-functions.html#cb56-10" tabindex="-1"></a>  is_bad <span class="ot">&lt;-</span> <span class="sc">!</span>(<span class="fu">nrow</span>(bad_rows) <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb56-11"><a href="core-functions.html#cb56-11" tabindex="-1"></a></span>
+<span id="cb56-12"><a href="core-functions.html#cb56-12" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">fail =</span> is_bad,</span>
+<span id="cb56-13"><a href="core-functions.html#cb56-13" tabindex="-1"></a>                 <span class="at">table =</span> bad_rows)</span>
+<span id="cb56-14"><a href="core-functions.html#cb56-14" tabindex="-1"></a></span>
+<span id="cb56-15"><a href="core-functions.html#cb56-15" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb56-16"><a href="core-functions.html#cb56-16" tabindex="-1"></a>}</span></code></pre></div>
+<p>This function checks if the panel map has valid weights and returns the panel map if it does. It can be used to validate a panel map after editing or modifications. For example:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="core-functions.html#cb57-1" tabindex="-1"></a><span class="do">## prepare panel map</span></span>
+<span id="cb57-2"><a href="core-functions.html#cb57-2" tabindex="-1"></a>new_pm <span class="ot">&lt;-</span> old_pm <span class="sc">|&gt;</span></span>
+<span id="cb57-3"><a href="core-functions.html#cb57-3" tabindex="-1"></a>  <span class="fu">mutate</span>() <span class="sc">|&gt;</span></span>
+<span id="cb57-4"><a href="core-functions.html#cb57-4" tabindex="-1"></a>  <span class="fu">filter</span>() <span class="sc">|&gt;</span></span>
+<span id="cb57-5"><a href="core-functions.html#cb57-5" tabindex="-1"></a>  <span class="fu">check_pm_weights</span>(code_in, code_out, weights)</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="core-functions.html#cb58-1" tabindex="-1"></a><span class="co">#' Check panel map weights are valid</span></span>
+<span id="cb58-2"><a href="core-functions.html#cb58-2" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb58-3"><a href="core-functions.html#cb58-3" tabindex="-1"></a><span class="co">#' Checks if `code_in`, `code_out` and `weights` columns of data frame forms a valid panel map.</span></span>
+<span id="cb58-4"><a href="core-functions.html#cb58-4" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb58-5"><a href="core-functions.html#cb58-5" tabindex="-1"></a><span class="co">#' @param df Data Frame containing weighted links `weights` between `code_in` and `code_out`.</span></span>
+<span id="cb58-6"><a href="core-functions.html#cb58-6" tabindex="-1"></a><span class="co">#' @param code_in Variable in `code_dict` containing source codes to convert from.</span></span>
+<span id="cb58-7"><a href="core-functions.html#cb58-7" tabindex="-1"></a><span class="co">#' @param code_out Variable in `code_dict` containing destination codes to convert to.</span></span>
+<span id="cb58-8"><a href="core-functions.html#cb58-8" tabindex="-1"></a><span class="co">#' @param weights Column containing weights for transforming values from `code_in` to `code_out`</span></span>
+<span id="cb58-9"><a href="core-functions.html#cb58-9" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb58-10"><a href="core-functions.html#cb58-10" tabindex="-1"></a><span class="co">#' @exports</span></span>
+<span id="cb58-11"><a href="core-functions.html#cb58-11" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb58-12"><a href="core-functions.html#cb58-12" tabindex="-1"></a><span class="co">#' @returns The original data frame if the check is passed and an error if not.</span></span>
+<span id="cb58-13"><a href="core-functions.html#cb58-13" tabindex="-1"></a><span id="check_weights">check_weights</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(df, code_in, code_out, weights){</span>
+<span id="cb58-14"><a href="core-functions.html#cb58-14" tabindex="-1"></a>  </span>
+<span id="cb58-15"><a href="core-functions.html#cb58-15" tabindex="-1"></a>  has_result <span class="ot">&lt;-</span> <a href="core-functions.html#has_bad_weights">has_bad_weights</a>(df, {{code_in}}, {{code_out}}, {{weights}})</span>
+<span id="cb58-16"><a href="core-functions.html#cb58-16" tabindex="-1"></a>  </span>
+<span id="cb58-17"><a href="core-functions.html#cb58-17" tabindex="-1"></a>  <span class="cf">if</span> (has_result<span class="sc">$</span>fail){</span>
+<span id="cb58-18"><a href="core-functions.html#cb58-18" tabindex="-1"></a>    </span>
+<span id="cb58-19"><a href="core-functions.html#cb58-19" tabindex="-1"></a>    cli<span class="sc">::</span><span class="fu">cli_abort</span>(<span class="fu">c</span>(</span>
+<span id="cb58-20"><a href="core-functions.html#cb58-20" tabindex="-1"></a>        <span class="st">"{.var weights} for each {.var code_in} must sum to 1"</span>,</span>
+<span id="cb58-21"><a href="core-functions.html#cb58-21" tabindex="-1"></a>        <span class="st">""</span></span>
+<span id="cb58-22"><a href="core-functions.html#cb58-22" tabindex="-1"></a>        ),</span>
+<span id="cb58-23"><a href="core-functions.html#cb58-23" tabindex="-1"></a>        <span class="at">class=</span><span class="st">"invalid_weights"</span></span>
+<span id="cb58-24"><a href="core-functions.html#cb58-24" tabindex="-1"></a>        )</span>
+<span id="cb58-25"><a href="core-functions.html#cb58-25" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb58-26"><a href="core-functions.html#cb58-26" tabindex="-1"></a>    <span class="fu">return</span>(df)</span>
+<span id="cb58-27"><a href="core-functions.html#cb58-27" tabindex="-1"></a>  }</span>
+<span id="cb58-28"><a href="core-functions.html#cb58-28" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="tests" class="section level4 hasAnchor" number="4.2.1.2">
+<h4>
+<span class="header-section-number">4.2.1.2</span> Tests<a href="core-functions.html#tests" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<ul>
+<li>flag function returns expected output</li>
+<li>check function works as expected:
+<ul>
+<li>returns informative error message</li>
+<li>returns unchanged panel map</li>
+</ul>
+</li>
+</ul>
+<p>Add testing data</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="core-functions.html#cb59-1" tabindex="-1"></a>equal_pm<span class="sc">$</span>bad_weights <span class="ot">&lt;-</span> equal_pm<span class="sc">$</span>pm_BA <span class="sc">|&gt;</span></span>
+<span id="cb59-2"><a href="core-functions.html#cb59-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">weight =</span> dplyr<span class="sc">::</span><span class="fu">case_when</span>(</span>
+<span id="cb59-3"><a href="core-functions.html#cb59-3" tabindex="-1"></a>                           weight <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> weight,</span>
+<span id="cb59-4"><a href="core-functions.html#cb59-4" tabindex="-1"></a>                           weight <span class="sc">&lt;</span> <span class="fl">0.5</span> <span class="sc">~</span> weight <span class="sc">-</span> <span class="fl">0.03</span>,</span>
+<span id="cb59-5"><a href="core-functions.html#cb59-5" tabindex="-1"></a>                           weight <span class="sc">&gt;=</span> <span class="fl">0.5</span> <span class="sc">~</span> weight <span class="sc">+</span> <span class="fl">0.01</span>,</span>
+<span id="cb59-6"><a href="core-functions.html#cb59-6" tabindex="-1"></a>                           T <span class="sc">~</span> weight))</span></code></pre></div>
+<p>Write tests:</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="core-functions.html#cb60-1" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_that</span>(</span>
+<span id="cb60-2"><a href="core-functions.html#cb60-2" tabindex="-1"></a>  <span class="st">"<a href="core-functions.html#has_bad_weights">has_bad_weights</a>() returns correct flags"</span>,</span>
+<span id="cb60-3"><a href="core-functions.html#cb60-3" tabindex="-1"></a>  {</span>
+<span id="cb60-4"><a href="core-functions.html#cb60-4" tabindex="-1"></a>    <span class="co"># good weights</span></span>
+<span id="cb60-5"><a href="core-functions.html#cb60-5" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_false</span>(</span>
+<span id="cb60-6"><a href="core-functions.html#cb60-6" tabindex="-1"></a>      <a href="core-functions.html#has_bad_weights">has_bad_weights</a>(equal_pm<span class="sc">$</span>pm_BA, std_A, std_B, weight)<span class="sc">$</span>fail</span>
+<span id="cb60-7"><a href="core-functions.html#cb60-7" tabindex="-1"></a>      )</span>
+<span id="cb60-8"><a href="core-functions.html#cb60-8" tabindex="-1"></a>    <span class="co"># bad weights</span></span>
+<span id="cb60-9"><a href="core-functions.html#cb60-9" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_true</span>(</span>
+<span id="cb60-10"><a href="core-functions.html#cb60-10" tabindex="-1"></a>      <a href="core-functions.html#has_bad_weights">has_bad_weights</a>(equal_pm<span class="sc">$</span>bad_weights, std_A, std_B, weight)<span class="sc">$</span>fail</span>
+<span id="cb60-11"><a href="core-functions.html#cb60-11" tabindex="-1"></a>      )</span>
+<span id="cb60-12"><a href="core-functions.html#cb60-12" tabindex="-1"></a>  }</span>
+<span id="cb60-13"><a href="core-functions.html#cb60-13" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Test passed</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="core-functions.html#cb62-1" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_that</span>(</span>
+<span id="cb62-2"><a href="core-functions.html#cb62-2" tabindex="-1"></a>  <span class="st">"<a href="core-functions.html#check_weights">check_weights</a>() works as expected"</span>,</span>
+<span id="cb62-3"><a href="core-functions.html#cb62-3" tabindex="-1"></a>  {</span>
+<span id="cb62-4"><a href="core-functions.html#cb62-4" tabindex="-1"></a>    <span class="co"># good weights</span></span>
+<span id="cb62-5"><a href="core-functions.html#cb62-5" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_identical</span>(</span>
+<span id="cb62-6"><a href="core-functions.html#cb62-6" tabindex="-1"></a>      <a href="core-functions.html#check_weights">check_weights</a>(equal_pm<span class="sc">$</span>pm_BA, std_A, std_B, weight), equal_pm<span class="sc">$</span>pm_BA)</span>
+<span id="cb62-7"><a href="core-functions.html#cb62-7" tabindex="-1"></a></span>
+<span id="cb62-8"><a href="core-functions.html#cb62-8" tabindex="-1"></a>    <span class="co"># bad weights</span></span>
+<span id="cb62-9"><a href="core-functions.html#cb62-9" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_error</span>(</span>
+<span id="cb62-10"><a href="core-functions.html#cb62-10" tabindex="-1"></a>      <a href="core-functions.html#check_weights">check_weights</a>(equal_pm<span class="sc">$</span>bad_weights, std_A, std_B, weight),</span>
+<span id="cb62-11"><a href="core-functions.html#cb62-11" tabindex="-1"></a>      <span class="at">class=</span><span class="st">"invalid_weights"</span></span>
+<span id="cb62-12"><a href="core-functions.html#cb62-12" tabindex="-1"></a>      )</span>
+<span id="cb62-13"><a href="core-functions.html#cb62-13" tabindex="-1"></a>  }</span>
+<span id="cb62-14"><a href="core-functions.html#cb62-14" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Test passed</code></pre>
+</div>
+</div>
+<div id="no-missing-data-values" class="section level3 hasAnchor" number="4.2.2">
+<h3>
+<span class="header-section-number">4.2.2</span> No Missing Data Values<a href="core-functions.html#no-missing-data-values" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<p>Except for a one-to-one transfer between classifications, there is no way for NA values in the Source Data to be preserved when transformed into the Target Classification. It doesn’t make sense to split NA into smaller parts, or to aggregate NA into a sum.</p>
+<p>Hence, any missing values need to be explicitly dealt with before applying a Panel Map transformation. Exactly how missing values should be treated will vary from dataset to dataset. This could involve replace the missing values with zeroes or some imputed values, or to remove them completely.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="core-functions.html#cb64-1" tabindex="-1"></a>pm_BA <span class="sc">|&gt;</span></span>
+<span id="cb64-2"><a href="core-functions.html#cb64-2" tabindex="-1"></a>  <a href="index.html#plt_pm_sigmoid">plt_pm_sigmoid</a>(<span class="at">from=</span>std_A, <span class="at">to=</span>std_B, <span class="at">weights =</span> weight) <span class="sc">+</span></span>
+<span id="cb64-3"><a href="core-functions.html#cb64-3" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette=</span><span class="st">"RdPu"</span>, <span class="at">direction=</span><span class="sc">-</span><span class="dv">1</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/gg-na-data-in-1.png" width="672"></p>
+<div id="functions-1" class="section level4 hasAnchor" number="4.2.2.1">
+<h4>
+<span class="header-section-number">4.2.2.1</span> Functions<a href="core-functions.html#functions-1" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<p>This function flags if the variables you want to transform have any missing values.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="core-functions.html#cb65-1" tabindex="-1"></a><span class="co">#' Flags NA in Source Data</span></span>
+<span id="cb65-2"><a href="core-functions.html#cb65-2" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb65-3"><a href="core-functions.html#cb65-3" tabindex="-1"></a><span id="has_missing">has_missing</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(.data){</span>
+<span id="cb65-4"><a href="core-functions.html#cb65-4" tabindex="-1"></a>  is_miss <span class="ot">&lt;-</span> .data <span class="sc">|&gt;</span></span>
+<span id="cb65-5"><a href="core-functions.html#cb65-5" tabindex="-1"></a>    <span class="fu">anyNA</span>()</span>
+<span id="cb65-6"><a href="core-functions.html#cb65-6" tabindex="-1"></a></span>
+<span id="cb65-7"><a href="core-functions.html#cb65-7" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">fail=</span>is_miss)</span>
+<span id="cb65-8"><a href="core-functions.html#cb65-8" tabindex="-1"></a></span>
+<span id="cb65-9"><a href="core-functions.html#cb65-9" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb65-10"><a href="core-functions.html#cb65-10" tabindex="-1"></a>}</span></code></pre></div>
+<p>This function checks the dataframe for missing values, and returns the original dataframe or tells the user to fix the NAs in their data. The dataframe should already be subsetted to contain only the Source Code and Source Value columns:</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="core-functions.html#cb66-1" tabindex="-1"></a><span class="do">## prepare data for transformation</span></span>
+<span id="cb66-2"><a href="core-functions.html#cb66-2" tabindex="-1"></a>data_in <span class="ot">&lt;-</span> all_df <span class="sc">|&gt;</span></span>
+<span id="cb66-3"><a href="core-functions.html#cb66-3" tabindex="-1"></a>  <span class="fu">select</span>(code_in, x1, x2) <span class="sc">|&gt;</span></span>
+<span id="cb66-4"><a href="core-functions.html#cb66-4" tabindex="-1"></a>  <a href="core-functions.html#check_missing">check_missing</a>()</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="core-functions.html#cb67-1" tabindex="-1"></a><span class="co">#' Checks Source Data for Missing Values</span></span>
+<span id="cb67-2"><a href="core-functions.html#cb67-2" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb67-3"><a href="core-functions.html#cb67-3" tabindex="-1"></a><span class="co">#' @inheritParams concord</span></span>
+<span id="cb67-4"><a href="core-functions.html#cb67-4" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb67-5"><a href="core-functions.html#cb67-5" tabindex="-1"></a><span class="co">#' @export</span></span>
+<span id="cb67-6"><a href="core-functions.html#cb67-6" tabindex="-1"></a><span id="check_missing">check_missing</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(data_in){</span>
+<span id="cb67-7"><a href="core-functions.html#cb67-7" tabindex="-1"></a>  has_result <span class="ot">&lt;-</span> <a href="core-functions.html#has_missing">has_missing</a>(data_in)</span>
+<span id="cb67-8"><a href="core-functions.html#cb67-8" tabindex="-1"></a>  </span>
+<span id="cb67-9"><a href="core-functions.html#cb67-9" tabindex="-1"></a>  <span class="cf">if</span>(has_result<span class="sc">$</span>fail){</span>
+<span id="cb67-10"><a href="core-functions.html#cb67-10" tabindex="-1"></a>    cli<span class="sc">::</span><span class="fu">cli_abort</span>(</span>
+<span id="cb67-11"><a href="core-functions.html#cb67-11" tabindex="-1"></a>      <span class="st">"{.var data_in} should not have any NA"</span>,</span>
+<span id="cb67-12"><a href="core-functions.html#cb67-12" tabindex="-1"></a>      <span class="at">class=</span><span class="st">"vals_na"</span></span>
+<span id="cb67-13"><a href="core-functions.html#cb67-13" tabindex="-1"></a>    )</span>
+<span id="cb67-14"><a href="core-functions.html#cb67-14" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb67-15"><a href="core-functions.html#cb67-15" tabindex="-1"></a>    <span class="fu">return</span>(data_in)</span>
+<span id="cb67-16"><a href="core-functions.html#cb67-16" tabindex="-1"></a>  }</span>
+<span id="cb67-17"><a href="core-functions.html#cb67-17" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="tests-1" class="section level4 hasAnchor" number="4.2.2.2">
+<h4>
+<span class="header-section-number">4.2.2.2</span> Tests<a href="core-functions.html#tests-1" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<p>Feed in data with missing values and expect: - TRUE flag - Error message</p>
+<p>Add testing data</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="core-functions.html#cb68-1" tabindex="-1"></a>equal_pm<span class="sc">$</span>bad_data <span class="ot">&lt;-</span> equal_pm<span class="sc">$</span>data_A</span>
+<span id="cb68-2"><a href="core-functions.html#cb68-2" tabindex="-1"></a>equal_pm<span class="sc">$</span>bad_data[<span class="dv">1</span>, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="core-functions.html#cb69-1" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_that</span>(</span>
+<span id="cb69-2"><a href="core-functions.html#cb69-2" tabindex="-1"></a>  <span class="st">"<a href="core-functions.html#has_missing">has_missing</a>() returns expected flags"</span>,</span>
+<span id="cb69-3"><a href="core-functions.html#cb69-3" tabindex="-1"></a>  {</span>
+<span id="cb69-4"><a href="core-functions.html#cb69-4" tabindex="-1"></a>    <span class="co"># good weights</span></span>
+<span id="cb69-5"><a href="core-functions.html#cb69-5" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_false</span>(</span>
+<span id="cb69-6"><a href="core-functions.html#cb69-6" tabindex="-1"></a>      <a href="core-functions.html#has_missing">has_missing</a>(equal_pm<span class="sc">$</span>data_A)<span class="sc">$</span>fail</span>
+<span id="cb69-7"><a href="core-functions.html#cb69-7" tabindex="-1"></a>      )</span>
+<span id="cb69-8"><a href="core-functions.html#cb69-8" tabindex="-1"></a>    </span>
+<span id="cb69-9"><a href="core-functions.html#cb69-9" tabindex="-1"></a>    <span class="co"># bad weights</span></span>
+<span id="cb69-10"><a href="core-functions.html#cb69-10" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_true</span>(</span>
+<span id="cb69-11"><a href="core-functions.html#cb69-11" tabindex="-1"></a>      <a href="core-functions.html#has_missing">has_missing</a>(equal_pm<span class="sc">$</span>bad_data)<span class="sc">$</span>fail</span>
+<span id="cb69-12"><a href="core-functions.html#cb69-12" tabindex="-1"></a>      )</span>
+<span id="cb69-13"><a href="core-functions.html#cb69-13" tabindex="-1"></a>  }</span>
+<span id="cb69-14"><a href="core-functions.html#cb69-14" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Test passed</code></pre>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="core-functions.html#cb71-1" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_that</span>(</span>
+<span id="cb71-2"><a href="core-functions.html#cb71-2" tabindex="-1"></a>  <span class="st">"<a href="core-functions.html#check_missing">check_missing</a>() works as expected"</span>,</span>
+<span id="cb71-3"><a href="core-functions.html#cb71-3" tabindex="-1"></a>  {</span>
+<span id="cb71-4"><a href="core-functions.html#cb71-4" tabindex="-1"></a>    <span class="do">## good data</span></span>
+<span id="cb71-5"><a href="core-functions.html#cb71-5" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_identical</span>(<a href="core-functions.html#check_missing">check_missing</a>(equal_pm<span class="sc">$</span>data_A), equal_pm<span class="sc">$</span>data_A)</span>
+<span id="cb71-6"><a href="core-functions.html#cb71-6" tabindex="-1"></a>    </span>
+<span id="cb71-7"><a href="core-functions.html#cb71-7" tabindex="-1"></a>    <span class="do">## bad data</span></span>
+<span id="cb71-8"><a href="core-functions.html#cb71-8" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_error</span>(<a href="core-functions.html#check_missing">check_missing</a>(equal_pm<span class="sc">$</span>bad_data),</span>
+<span id="cb71-9"><a href="core-functions.html#cb71-9" tabindex="-1"></a>                           <span class="at">class =</span> <span class="st">"vals_na"</span>)</span>
+<span id="cb71-10"><a href="core-functions.html#cb71-10" tabindex="-1"></a>  }</span>
+<span id="cb71-11"><a href="core-functions.html#cb71-11" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Test passed</code></pre>
+</div>
+</div>
+<div id="source-code-coverage" class="section level3 hasAnchor" number="4.2.3">
+<h3>
+<span class="header-section-number">4.2.3</span> Source Code Coverage<a href="core-functions.html#source-code-coverage" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<p>A Panel Map must cover all Source Codes present in the Source Data. In other words, for a transformation to be valid, no Source Data should be left behind.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="core-functions.html#cb73-1" tabindex="-1"></a>gg_x_mtx <span class="ot">&lt;-</span> <a href="index.html#plt_df_mtx">plt_df_mtx</a>(data_A, A_100<span class="sc">:</span>A_prod, std_A)</span>
+<span id="cb73-2"><a href="core-functions.html#cb73-2" tabindex="-1"></a></span>
+<span id="cb73-3"><a href="core-functions.html#cb73-3" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: 'patchwork'</code></pre>
+<pre><code>## The following object is masked from 'package:cowplot':
+## 
+##     align_plots</code></pre>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="core-functions.html#cb76-1" tabindex="-1"></a>gg_pm_mtx <span class="sc">+</span> </span>
+<span id="cb76-2"><a href="core-functions.html#cb76-2" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb76-3"><a href="core-functions.html#cb76-3" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span> gg_x_mtx <span class="sc">+</span></span>
+<span id="cb76-4"><a href="core-functions.html#cb76-4" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">position=</span><span class="st">"right"</span>, <span class="at">limits=</span>rev) <span class="sc">+</span></span>
+<span id="cb76-5"><a href="core-functions.html#cb76-5" tabindex="-1"></a>patchwork<span class="sc">::</span><span class="fu">plot_annotation</span>(<span class="at">title=</span><span class="st">"Panel Map covers Source Data"</span>)</span></code></pre></div>
+<pre><code>## Scale for y is already present.
+## Adding another scale for y, which will replace the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/gg-data-in-mtx-1.png" width="672"></p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="core-functions.html#cb78-1" tabindex="-1"></a>gg_x_bad <span class="ot">&lt;-</span> data_A <span class="sc">|&gt;</span></span>
+<span id="cb78-2"><a href="core-functions.html#cb78-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">add_row</span>(<span class="at">std_A =</span> <span class="st">"x7285!"</span>, </span>
+<span id="cb78-3"><a href="core-functions.html#cb78-3" tabindex="-1"></a>          <span class="at">A_100 =</span> <span class="dv">100</span>, </span>
+<span id="cb78-4"><a href="core-functions.html#cb78-4" tabindex="-1"></a>          <span class="at">A_prod =</span> <span class="fl">3895.3</span>) <span class="sc">|&gt;</span></span>
+<span id="cb78-5"><a href="core-functions.html#cb78-5" tabindex="-1"></a>  <a href="index.html#plt_df_mtx">plt_df_mtx</a>(A_100<span class="sc">:</span>A_prod, std_A)</span>
+<span id="cb78-6"><a href="core-functions.html#cb78-6" tabindex="-1"></a></span>
+<span id="cb78-7"><a href="core-functions.html#cb78-7" tabindex="-1"></a>gg_pm_bad <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">from=</span><span class="fu">c</span>(<span class="cn">NA</span>), <span class="at">to=</span><span class="fu">unique</span>(codes_BA<span class="sc">$</span>std_B)) <span class="sc">|&gt;</span></span>
+<span id="cb78-8"><a href="core-functions.html#cb78-8" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">weight=</span><span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
+<span id="cb78-9"><a href="core-functions.html#cb78-9" tabindex="-1"></a>  <span class="fu">bind_rows</span>(inc_long) <span class="sc">|&gt;</span></span>
+<span id="cb78-10"><a href="core-functions.html#cb78-10" tabindex="-1"></a>  <a href="index.html#plt_inc_long_mtx">plt_inc_long_mtx</a>(to, from, weight) <span class="sc">+</span></span>
+<span id="cb78-11"><a href="core-functions.html#cb78-11" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(inc_long, <span class="sc">!</span><span class="fu">is.na</span>(weight)), <span class="fu">aes</span>(<span class="at">label=</span><span class="fu">round</span>(weight, <span class="dv">2</span>)))</span>
+<span id="cb78-12"><a href="core-functions.html#cb78-12" tabindex="-1"></a></span>
+<span id="cb78-13"><a href="core-functions.html#cb78-13" tabindex="-1"></a></span>
+<span id="cb78-14"><a href="core-functions.html#cb78-14" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb78-15"><a href="core-functions.html#cb78-15" tabindex="-1"></a>gg_pm_bad <span class="sc">+</span> </span>
+<span id="cb78-16"><a href="core-functions.html#cb78-16" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb78-17"><a href="core-functions.html#cb78-17" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">""</span>) <span class="sc">+</span> </span>
+<span id="cb78-18"><a href="core-functions.html#cb78-18" tabindex="-1"></a>gg_x_bad <span class="sc">+</span></span>
+<span id="cb78-19"><a href="core-functions.html#cb78-19" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">position=</span><span class="st">"right"</span>, <span class="at">limits=</span>rev) <span class="sc">+</span></span>
+<span id="cb78-20"><a href="core-functions.html#cb78-20" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette=</span><span class="st">"Purples"</span>) <span class="sc">+</span></span>
+<span id="cb78-21"><a href="core-functions.html#cb78-21" tabindex="-1"></a>patchwork<span class="sc">::</span><span class="fu">plot_annotation</span>(<span class="at">title=</span><span class="st">"Panel Map does not cover fully Source Data"</span>)</span></code></pre></div>
+<pre><code>## Scale for y is already present.
+## Adding another scale for y, which will replace the existing scale.
+## Scale for fill is already present.
+## Adding another scale for fill, which will replace the existing scale.</code></pre>
+<p><img src="_main_files/figure-html/gg-no-coverage-1.png" width="672"></p>
+<p>Depending on how the transformation is implemented, coverage mismatches can result in both explicit and implicit/hidden errors. In particular, having conformable matrix dimensions is not sufficient to avoid corrupting data unless you check that the indices match. This is a common issue with using matrices for data wrangling, so this package implements transformations using database operations.</p>
+<div id="functions-2" class="section level4 hasAnchor" number="4.2.3.1">
+<h4>
+<span class="header-section-number">4.2.3.1</span> Functions<a href="core-functions.html#functions-2" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<p>Internal checking function – assumes <code>.map</code> is a valid map. Note this could be (quickly) checked for using a class condition discussed in <a href="https://github.com/cynthiahqy/conformr-project/issues/43">GitHub issue #43</a></p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="core-functions.html#cb80-1" tabindex="-1"></a><span class="co">#' Flag if data set is not completely cover by panel map</span></span>
+<span id="cb80-2"><a href="core-functions.html#cb80-2" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb80-3"><a href="core-functions.html#cb80-3" tabindex="-1"></a><span class="co">#' @inheritParams use_panel_map</span></span>
+<span id="cb80-4"><a href="core-functions.html#cb80-4" tabindex="-1"></a><span class="co">#'  </span></span>
+<span id="cb80-5"><a href="core-functions.html#cb80-5" tabindex="-1"></a><span id="has_coverage">has_coverage</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(.data, .map, .from){</span>
+<span id="cb80-6"><a href="core-functions.html#cb80-6" tabindex="-1"></a>  </span>
+<span id="cb80-7"><a href="core-functions.html#cb80-7" tabindex="-1"></a>  missing_links <span class="ot">&lt;-</span> .data <span class="sc">|&gt;</span></span>
+<span id="cb80-8"><a href="core-functions.html#cb80-8" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(tidyselect<span class="sc">::</span><span class="fu">all_of</span>(.from)) <span class="sc">|&gt;</span></span>
+<span id="cb80-9"><a href="core-functions.html#cb80-9" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb80-10"><a href="core-functions.html#cb80-10" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">anti_join</span>(.map, <span class="at">by =</span> .from)</span>
+<span id="cb80-11"><a href="core-functions.html#cb80-11" tabindex="-1"></a></span>
+<span id="cb80-12"><a href="core-functions.html#cb80-12" tabindex="-1"></a>  is_covered <span class="ot">&lt;-</span> (<span class="fu">nrow</span>(missing_links) <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb80-13"><a href="core-functions.html#cb80-13" tabindex="-1"></a></span>
+<span id="cb80-14"><a href="core-functions.html#cb80-14" tabindex="-1"></a>  results <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">fail=</span><span class="sc">!</span>is_covered,</span>
+<span id="cb80-15"><a href="core-functions.html#cb80-15" tabindex="-1"></a>                  <span class="at">table=</span>missing_links)</span>
+<span id="cb80-16"><a href="core-functions.html#cb80-16" tabindex="-1"></a></span>
+<span id="cb80-17"><a href="core-functions.html#cb80-17" tabindex="-1"></a>  <span class="fu">return</span>(results)</span>
+<span id="cb80-18"><a href="core-functions.html#cb80-18" tabindex="-1"></a>}</span></code></pre></div>
+<p>Error constructing function, also used in <code><a href="core-functions.html#concord">concord</a>()</code></p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="core-functions.html#cb81-1" tabindex="-1"></a><span class="co">#' Check coverage of panel map over source data</span></span>
+<span id="cb81-2"><a href="core-functions.html#cb81-2" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb81-3"><a href="core-functions.html#cb81-3" tabindex="-1"></a><span class="co">#' @inheritParams concord</span></span>
+<span id="cb81-4"><a href="core-functions.html#cb81-4" tabindex="-1"></a><span class="co">#' @inheritParams use_panel_map</span></span>
+<span id="cb81-5"><a href="core-functions.html#cb81-5" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb81-6"><a href="core-functions.html#cb81-6" tabindex="-1"></a><span class="co">#' @returns `data_in` if check is successful, throws error otherwise.</span></span>
+<span id="cb81-7"><a href="core-functions.html#cb81-7" tabindex="-1"></a><span class="co">#' @examples</span></span>
+<span id="cb81-8"><a href="core-functions.html#cb81-8" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb81-9"><a href="core-functions.html#cb81-9" tabindex="-1"></a><span class="co">#' /notrun{</span></span>
+<span id="cb81-10"><a href="core-functions.html#cb81-10" tabindex="-1"></a><span class="co">#' <a href="core-functions.html#check_coverage">check_coverage</a>(df, pm, "std_A")</span></span>
+<span id="cb81-11"><a href="core-functions.html#cb81-11" tabindex="-1"></a><span class="co">#' }</span></span>
+<span id="cb81-12"><a href="core-functions.html#cb81-12" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb81-13"><a href="core-functions.html#cb81-13" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb81-14"><a href="core-functions.html#cb81-14" tabindex="-1"></a><span id="check_coverage">check_coverage</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(data_in, pm, .from){</span>
+<span id="cb81-15"><a href="core-functions.html#cb81-15" tabindex="-1"></a>  <span class="co"># call flag function</span></span>
+<span id="cb81-16"><a href="core-functions.html#cb81-16" tabindex="-1"></a>  has_result <span class="ot">&lt;-</span> <a href="core-functions.html#has_coverage">has_coverage</a>(data_in, pm, .from)</span>
+<span id="cb81-17"><a href="core-functions.html#cb81-17" tabindex="-1"></a>  </span>
+<span id="cb81-18"><a href="core-functions.html#cb81-18" tabindex="-1"></a>  <span class="co"># conditionals</span></span>
+<span id="cb81-19"><a href="core-functions.html#cb81-19" tabindex="-1"></a>  <span class="cf">if</span>(has_result<span class="sc">$</span>fail){</span>
+<span id="cb81-20"><a href="core-functions.html#cb81-20" tabindex="-1"></a>    cli<span class="sc">::</span><span class="fu">cli_abort</span>(</span>
+<span id="cb81-21"><a href="core-functions.html#cb81-21" tabindex="-1"></a>      <span class="st">"{.var data_in$from_code} has values not covered by {.var pm$from_code}"</span>,</span>
+<span id="cb81-22"><a href="core-functions.html#cb81-22" tabindex="-1"></a>      <span class="at">class=</span><span class="st">"not_covered"</span></span>
+<span id="cb81-23"><a href="core-functions.html#cb81-23" tabindex="-1"></a>    )</span>
+<span id="cb81-24"><a href="core-functions.html#cb81-24" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb81-25"><a href="core-functions.html#cb81-25" tabindex="-1"></a>    <span class="fu">return</span>(data_in)</span>
+<span id="cb81-26"><a href="core-functions.html#cb81-26" tabindex="-1"></a>  }</span>
+<span id="cb81-27"><a href="core-functions.html#cb81-27" tabindex="-1"></a>  </span>
+<span id="cb81-28"><a href="core-functions.html#cb81-28" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="tests-2" class="section level4 hasAnchor" number="4.2.3.2">
+<h4>
+<span class="header-section-number">4.2.3.2</span> Tests<a href="core-functions.html#tests-2" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<p>Add some more testing data</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="core-functions.html#cb82-1" tabindex="-1"></a>equal_pm<span class="sc">$</span>data_extra <span class="ot">&lt;-</span> equal_pm<span class="sc">$</span>data_A <span class="sc">|&gt;</span></span>
+<span id="cb82-2"><a href="core-functions.html#cb82-2" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">add_row</span>(<span class="at">std_A =</span> <span class="st">"x7777"</span>, <span class="at">A_100 =</span> <span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="core-functions.html#cb83-1" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_that</span>(</span>
+<span id="cb83-2"><a href="core-functions.html#cb83-2" tabindex="-1"></a>  <span class="st">"<a href="core-functions.html#has_coverage">has_coverage</a>() returns expected flags"</span>,</span>
+<span id="cb83-3"><a href="core-functions.html#cb83-3" tabindex="-1"></a>  {</span>
+<span id="cb83-4"><a href="core-functions.html#cb83-4" tabindex="-1"></a>    <span class="do">## complete coverage</span></span>
+<span id="cb83-5"><a href="core-functions.html#cb83-5" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_false</span>(<a href="core-functions.html#has_coverage">has_coverage</a>(equal_pm<span class="sc">$</span>data_A, equal_pm<span class="sc">$</span>pm_BA, <span class="st">"std_A"</span>)<span class="sc">$</span>fail)</span>
+<span id="cb83-6"><a href="core-functions.html#cb83-6" tabindex="-1"></a>    </span>
+<span id="cb83-7"><a href="core-functions.html#cb83-7" tabindex="-1"></a>    <span class="do">## incomplete coverage</span></span>
+<span id="cb83-8"><a href="core-functions.html#cb83-8" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_true</span>(<a href="core-functions.html#has_coverage">has_coverage</a>(equal_pm<span class="sc">$</span>data_extra, equal_pm<span class="sc">$</span>pm_BA, <span class="st">"std_A"</span>)<span class="sc">$</span>fail)</span>
+<span id="cb83-9"><a href="core-functions.html#cb83-9" tabindex="-1"></a>  }</span>
+<span id="cb83-10"><a href="core-functions.html#cb83-10" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Test passed</code></pre>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="core-functions.html#cb85-1" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_that</span>(</span>
+<span id="cb85-2"><a href="core-functions.html#cb85-2" tabindex="-1"></a>  <span class="st">"<a href="core-functions.html#check_coverage">check_coverage</a>() works as expected"</span>,</span>
+<span id="cb85-3"><a href="core-functions.html#cb85-3" tabindex="-1"></a>  {</span>
+<span id="cb85-4"><a href="core-functions.html#cb85-4" tabindex="-1"></a>    <span class="do">## complete coverage</span></span>
+<span id="cb85-5"><a href="core-functions.html#cb85-5" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_identical</span>(<a href="core-functions.html#check_coverage">check_coverage</a>(equal_pm<span class="sc">$</span>data_A, equal_pm<span class="sc">$</span>pm_BA, <span class="st">"std_A"</span>), equal_pm<span class="sc">$</span>data_A)</span>
+<span id="cb85-6"><a href="core-functions.html#cb85-6" tabindex="-1"></a>    <span class="do">## incomplete coverage</span></span>
+<span id="cb85-7"><a href="core-functions.html#cb85-7" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_error</span>(<a href="core-functions.html#check_coverage">check_coverage</a>(equal_pm<span class="sc">$</span>data_extra, equal_pm<span class="sc">$</span>pm_BA, <span class="st">"std_A"</span>),</span>
+<span id="cb85-8"><a href="core-functions.html#cb85-8" tabindex="-1"></a>                           <span class="at">class =</span> <span class="st">"not_covered"</span>)</span>
+<span id="cb85-9"><a href="core-functions.html#cb85-9" tabindex="-1"></a>  }</span>
+<span id="cb85-10"><a href="core-functions.html#cb85-10" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Test passed</code></pre>
+</div>
+</div>
+</div>
+<div id="use-panel-map-on-data" class="section level2 hasAnchor" number="4.3">
+<h2>
+<span class="header-section-number">4.3</span> Use Panel Map on Data<a href="core-functions.html#use-panel-map-on-data" class="anchor-section" aria-label="Anchor link to header"></a>
+</h2>
+<div id="single-step-concordance" class="section level3 hasAnchor" number="4.3.1">
+<h3>
+<span class="header-section-number">4.3.1</span> Single Step Concordance<a href="core-functions.html#single-step-concordance" class="anchor-section" aria-label="Anchor link to header"></a>
+</h3>
+<div id="stylized-code" class="section level4 hasAnchor" number="4.3.1.1">
+<h4>
+<span class="header-section-number">4.3.1.1</span> Stylized Code<a href="core-functions.html#stylized-code" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<p>Assuming all the validity conditions are met, we want a simple and concise way to apply a panel map to data which looks something like:</p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="core-functions.html#cb87-1" tabindex="-1"></a><span class="co"># --- prepare panel map --------------------</span></span>
+<span id="cb87-2"><a href="core-functions.html#cb87-2" tabindex="-1"></a>df_pm <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"concordance-table.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb87-3"><a href="core-functions.html#cb87-3" tabindex="-1"></a>  conformr<span class="sc">::</span><span class="fu">make_panel_map_equal</span>(...) <span class="sc">|&gt;</span></span>
+<span id="cb87-4"><a href="core-functions.html#cb87-4" tabindex="-1"></a>  conformr<span class="sc">::</span><span class="fu">validate_panel_map</span>(...)</span>
+<span id="cb87-5"><a href="core-functions.html#cb87-5" tabindex="-1"></a>  </span>
+<span id="cb87-6"><a href="core-functions.html#cb87-6" tabindex="-1"></a><span class="co"># --- prepare data ---------------------------</span></span>
+<span id="cb87-7"><a href="core-functions.html#cb87-7" tabindex="-1"></a>df_data_in <span class="ot">&lt;-</span></span>
+<span id="cb87-8"><a href="core-functions.html#cb87-8" tabindex="-1"></a>  <span class="fu">read_csv</span>(<span class="st">"your-source-data.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb87-9"><a href="core-functions.html#cb87-9" tabindex="-1"></a>  conformr<span class="sc">::</span><span class="fu">validate_data_in</span>(...)</span>
+<span id="cb87-10"><a href="core-functions.html#cb87-10" tabindex="-1"></a>  </span>
+<span id="cb87-11"><a href="core-functions.html#cb87-11" tabindex="-1"></a><span class="do">## --- apply (valid) transformation -----------</span></span>
+<span id="cb87-12"><a href="core-functions.html#cb87-12" tabindex="-1"></a>conformr<span class="sc">::</span><a href="core-functions.html#concord">concord</a>(</span>
+<span id="cb87-13"><a href="core-functions.html#cb87-13" tabindex="-1"></a>  <span class="at">data_in =</span> df_data_in, <span class="at">pm =</span> df_pm,</span>
+<span id="cb87-14"><a href="core-functions.html#cb87-14" tabindex="-1"></a>  <span class="at">from_code =</span> source, <span class="at">to_code =</span> target,</span>
+<span id="cb87-15"><a href="core-functions.html#cb87-15" tabindex="-1"></a>  <span class="at">m_weights =</span> weight, <span class="at">values_from =</span> value_in,</span>
+<span id="cb87-16"><a href="core-functions.html#cb87-16" tabindex="-1"></a>  <span class="at">.suffix =</span> <span class="st">"_out"</span></span>
+<span id="cb87-17"><a href="core-functions.html#cb87-17" tabindex="-1"></a>)</span></code></pre></div>
+<p>Preparing a panel map and data for valid transformation could look like:</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="core-functions.html#cb88-1" tabindex="-1"></a><span class="do">## --- prepare panel map -------------------- ##</span></span>
+<span id="cb88-2"><a href="core-functions.html#cb88-2" tabindex="-1"></a><span class="co"># by importing a manually encoded map</span></span>
+<span id="cb88-3"><a href="core-functions.html#cb88-3" tabindex="-1"></a>df_pm <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"your-panel-map.csv"</span>)</span>
+<span id="cb88-4"><a href="core-functions.html#cb88-4" tabindex="-1"></a><span class="co"># or creating one from a concordance table</span></span>
+<span id="cb88-5"><a href="core-functions.html#cb88-5" tabindex="-1"></a>df_pm <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"concordance-table.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb88-6"><a href="core-functions.html#cb88-6" tabindex="-1"></a>  conformr<span class="sc">::</span><span class="fu">make_panel_map_equal</span>(</span>
+<span id="cb88-7"><a href="core-functions.html#cb88-7" tabindex="-1"></a>    <span class="at">code_in =</span> source, <span class="at">code_out =</span> target,</span>
+<span id="cb88-8"><a href="core-functions.html#cb88-8" tabindex="-1"></a>    <span class="at">.weights_to =</span> <span class="st">"weight"</span>)</span>
+<span id="cb88-9"><a href="core-functions.html#cb88-9" tabindex="-1"></a></span>
+<span id="cb88-10"><a href="core-functions.html#cb88-10" tabindex="-1"></a><span class="do">## --- prepare source data ------------------ ##</span></span>
+<span id="cb88-11"><a href="core-functions.html#cb88-11" tabindex="-1"></a><span class="co"># example using {dplyr}:</span></span>
+<span id="cb88-12"><a href="core-functions.html#cb88-12" tabindex="-1"></a>df_data_in <span class="ot">&lt;-</span></span>
+<span id="cb88-13"><a href="core-functions.html#cb88-13" tabindex="-1"></a>  <span class="fu">read_csv</span>(<span class="st">"your-source-data.csv"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb88-14"><a href="core-functions.html#cb88-14" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span></span>
+<span id="cb88-15"><a href="core-functions.html#cb88-15" tabindex="-1"></a>  <span class="fu">group_by</span>(source) <span class="sc">|&gt;</span></span>
+<span id="cb88-16"><a href="core-functions.html#cb88-16" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">value_in =</span> <span class="fu">sum</span>(gdp))</span>
+<span id="cb88-17"><a href="core-functions.html#cb88-17" tabindex="-1"></a></span>
+<span id="cb88-18"><a href="core-functions.html#cb88-18" tabindex="-1"></a><span class="do">## --- apply (valid) transformation --------- ##</span></span>
+<span id="cb88-19"><a href="core-functions.html#cb88-19" tabindex="-1"></a>conformr<span class="sc">::</span><a href="core-functions.html#concord">concord</a>(</span>
+<span id="cb88-20"><a href="core-functions.html#cb88-20" tabindex="-1"></a>  <span class="at">data_in =</span> df_data_in, <span class="at">pm =</span> df_pm,</span>
+<span id="cb88-21"><a href="core-functions.html#cb88-21" tabindex="-1"></a>  <span class="at">from_code =</span> source, <span class="at">to_code =</span> target,</span>
+<span id="cb88-22"><a href="core-functions.html#cb88-22" tabindex="-1"></a>  <span class="at">m_weights =</span> weight, <span class="at">values_from =</span> value_in,</span>
+<span id="cb88-23"><a href="core-functions.html#cb88-23" tabindex="-1"></a>  <span class="at">.suffix =</span> <span class="st">"_out"</span></span>
+<span id="cb88-24"><a href="core-functions.html#cb88-24" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="warnings-and-errors" class="section level4 hasAnchor" number="4.3.1.2">
+<h4>
+<span class="header-section-number">4.3.1.2</span> Warnings and Errors<a href="core-functions.html#warnings-and-errors" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<p>The concordance function should throw error when:</p>
+<ul>
+<li>panel map (<code>pm</code>) has invalid weights</li>
+<li>source data (<code>data_in</code>) column has missing values</li>
+</ul>
+<p>The concordance function should warn users about data prep?:</p>
+<ul>
+<li>multiple rows for a given <code>code_in</code> in <code>data_in</code>; should only have one set of <code>value_in</code> for each <code>code_in</code>
+</li>
+</ul>
+</div>
+<div id="functions-3" class="section level4 hasAnchor" number="4.3.1.3">
+<h4>
+<span class="header-section-number">4.3.1.3</span> Functions<a href="core-functions.html#functions-3" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<p>This function takes a valid panel map and data with matching names for the Source Code columns and transforms the data to the Target Classification.</p>
+<p>Add informative error messages later:</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="core-functions.html#cb89-1" tabindex="-1"></a>  in_data_in <span class="ot">&lt;-</span> (str.vals <span class="sc">%in%</span> <span class="fu">colnames</span>(data_in))</span>
+<span id="cb89-2"><a href="core-functions.html#cb89-2" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">all</span>(in_data_in)){</span>
+<span id="cb89-3"><a href="core-functions.html#cb89-3" tabindex="-1"></a>    cli<span class="sc">::</span><span class="fu">cli_abort</span>(</span>
+<span id="cb89-4"><a href="core-functions.html#cb89-4" tabindex="-1"></a>      <span class="st">"{.code {names(dots)[!in_data_in]}} cannot be found in {.var data_in}"</span>,</span>
+<span id="cb89-5"><a href="core-functions.html#cb89-5" tabindex="-1"></a>      <span class="at">class =</span> <span class="st">"cols_not_found"</span>)</span>
+<span id="cb89-6"><a href="core-functions.html#cb89-6" tabindex="-1"></a>  }</span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="core-functions.html#cb90-1" tabindex="-1"></a><span class="co">#' Transform data from Source to Target classification using Panel Map</span></span>
+<span id="cb90-2"><a href="core-functions.html#cb90-2" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb90-3"><a href="core-functions.html#cb90-3" tabindex="-1"></a><span class="co">#' Currently checks for valid Mapping weights, missing values, and coverage.</span></span>
+<span id="cb90-4"><a href="core-functions.html#cb90-4" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb90-5"><a href="core-functions.html#cb90-5" tabindex="-1"></a><span class="co">#' @param data_in A Data Frame containing the values you want to transform</span></span>
+<span id="cb90-6"><a href="core-functions.html#cb90-6" tabindex="-1"></a><span class="co">#' @param pm A Data Frame containing valid Mapping Weights between `from_code` and `to_code`.</span></span>
+<span id="cb90-7"><a href="core-functions.html#cb90-7" tabindex="-1"></a><span class="co">#' @param from_code Variable containing Source Codes. Must be present in both `data_in` and `pm`</span></span>
+<span id="cb90-8"><a href="core-functions.html#cb90-8" tabindex="-1"></a><span class="co">#' @param to_code Variable in `pm` containing Target Codes.</span></span>
+<span id="cb90-9"><a href="core-functions.html#cb90-9" tabindex="-1"></a><span class="co">#' @param m_weights Variable in `pm` containing Mapping Weights.</span></span>
+<span id="cb90-10"><a href="core-functions.html#cb90-10" tabindex="-1"></a><span class="co">#' @param values_from A vector of variables in `data_in` to be transformed. E.g. `c(var1, var2)`</span></span>
+<span id="cb90-11"><a href="core-functions.html#cb90-11" tabindex="-1"></a><span class="co">#' @param .suffix An (optional) string appended to each `values_from` name to create column names for transformed values.</span></span>
+<span id="cb90-12"><a href="core-functions.html#cb90-12" tabindex="-1"></a><span class="co">#' Defaults to `"_out"`</span></span>
+<span id="cb90-13"><a href="core-functions.html#cb90-13" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb90-14"><a href="core-functions.html#cb90-14" tabindex="-1"></a><span class="co">#' @return</span></span>
+<span id="cb90-15"><a href="core-functions.html#cb90-15" tabindex="-1"></a><span class="co">#' @export</span></span>
+<span id="cb90-16"><a href="core-functions.html#cb90-16" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb90-17"><a href="core-functions.html#cb90-17" tabindex="-1"></a><span class="co">#' @examples</span></span>
+<span id="cb90-18"><a href="core-functions.html#cb90-18" tabindex="-1"></a><span class="co">#' \dontrun{</span></span>
+<span id="cb90-19"><a href="core-functions.html#cb90-19" tabindex="-1"></a><span class="co">#' <a href="core-functions.html#concord">concord</a>(data_in = equal_pm$data_A,</span></span>
+<span id="cb90-20"><a href="core-functions.html#cb90-20" tabindex="-1"></a><span class="co">#'        pm = equal_pm$pm_BA,</span></span>
+<span id="cb90-21"><a href="core-functions.html#cb90-21" tabindex="-1"></a><span class="co">#'        from_code = std_A,</span></span>
+<span id="cb90-22"><a href="core-functions.html#cb90-22" tabindex="-1"></a><span class="co">#'        to_code = std_B,</span></span>
+<span id="cb90-23"><a href="core-functions.html#cb90-23" tabindex="-1"></a><span class="co">#'        m_weights = weight,</span></span>
+<span id="cb90-24"><a href="core-functions.html#cb90-24" tabindex="-1"></a><span class="co">#'        values_from = c(A_100),</span></span>
+<span id="cb90-25"><a href="core-functions.html#cb90-25" tabindex="-1"></a><span class="co">#'        .suffix = "_out")</span></span>
+<span id="cb90-26"><a href="core-functions.html#cb90-26" tabindex="-1"></a><span class="co">#' }</span></span>
+<span id="cb90-27"><a href="core-functions.html#cb90-27" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb90-28"><a href="core-functions.html#cb90-28" tabindex="-1"></a><span id="concord">concord</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(data_in, pm, from_code, to_code, m_weights, values_from, <span class="at">.suffix=</span><span class="cn">NULL</span>){</span>
+<span id="cb90-29"><a href="core-functions.html#cb90-29" tabindex="-1"></a>  </span>
+<span id="cb90-30"><a href="core-functions.html#cb90-30" tabindex="-1"></a>  <span class="do">## defuse arugments</span></span>
+<span id="cb90-31"><a href="core-functions.html#cb90-31" tabindex="-1"></a>  str.to <span class="ot">&lt;-</span> rlang<span class="sc">::</span><span class="fu">as_string</span>(rlang<span class="sc">::</span><span class="fu">enexpr</span>(to_code))</span>
+<span id="cb90-32"><a href="core-functions.html#cb90-32" tabindex="-1"></a>  str.from <span class="ot">&lt;-</span> rlang<span class="sc">::</span><span class="fu">as_string</span>(rlang<span class="sc">::</span><span class="fu">enexpr</span>(from_code))</span>
+<span id="cb90-33"><a href="core-functions.html#cb90-33" tabindex="-1"></a>  </span>
+<span id="cb90-34"><a href="core-functions.html#cb90-34" tabindex="-1"></a>  <span class="do">## check conditions</span></span>
+<span id="cb90-35"><a href="core-functions.html#cb90-35" tabindex="-1"></a>  pm <span class="sc">|&gt;</span> </span>
+<span id="cb90-36"><a href="core-functions.html#cb90-36" tabindex="-1"></a>    <a href="core-functions.html#check_weights">check_weights</a>(<span class="at">code_in =</span> {{from_code}},</span>
+<span id="cb90-37"><a href="core-functions.html#cb90-37" tabindex="-1"></a>                  <span class="at">code_out =</span> {{to_code}},</span>
+<span id="cb90-38"><a href="core-functions.html#cb90-38" tabindex="-1"></a>                  <span class="at">weights =</span> {{m_weights}})</span>
+<span id="cb90-39"><a href="core-functions.html#cb90-39" tabindex="-1"></a>  </span>
+<span id="cb90-40"><a href="core-functions.html#cb90-40" tabindex="-1"></a>  subset_in <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(</span>
+<span id="cb90-41"><a href="core-functions.html#cb90-41" tabindex="-1"></a>    data_in <span class="sc">|&gt;</span></span>
+<span id="cb90-42"><a href="core-functions.html#cb90-42" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>({{from_code}}, {{values_from}}), </span>
+<span id="cb90-43"><a href="core-functions.html#cb90-43" tabindex="-1"></a>    <span class="at">error =</span> <span class="cf">function</span>(cnd) {</span>
+<span id="cb90-44"><a href="core-functions.html#cb90-44" tabindex="-1"></a>      cli<span class="sc">::</span><span class="fu">cli_abort</span>(</span>
+<span id="cb90-45"><a href="core-functions.html#cb90-45" tabindex="-1"></a>      <span class="st">"{.var from_code} or {.var values_from} could not be found in {.var data_in}"</span>,</span>
+<span id="cb90-46"><a href="core-functions.html#cb90-46" tabindex="-1"></a>      <span class="at">class =</span> <span class="st">"vals_not_found"</span>)</span>
+<span id="cb90-47"><a href="core-functions.html#cb90-47" tabindex="-1"></a>    }</span>
+<span id="cb90-48"><a href="core-functions.html#cb90-48" tabindex="-1"></a>  )</span>
+<span id="cb90-49"><a href="core-functions.html#cb90-49" tabindex="-1"></a>  </span>
+<span id="cb90-50"><a href="core-functions.html#cb90-50" tabindex="-1"></a>  subset_in <span class="sc">|&gt;</span></span>
+<span id="cb90-51"><a href="core-functions.html#cb90-51" tabindex="-1"></a>    <a href="core-functions.html#check_missing">check_missing</a>()</span>
+<span id="cb90-52"><a href="core-functions.html#cb90-52" tabindex="-1"></a>  </span>
+<span id="cb90-53"><a href="core-functions.html#cb90-53" tabindex="-1"></a>  <a href="core-functions.html#check_coverage">check_coverage</a>(subset_in, pm, str.from)</span>
+<span id="cb90-54"><a href="core-functions.html#cb90-54" tabindex="-1"></a>  </span>
+<span id="cb90-55"><a href="core-functions.html#cb90-55" tabindex="-1"></a>  <span class="do">## apply transformation</span></span>
+<span id="cb90-56"><a href="core-functions.html#cb90-56" tabindex="-1"></a>  <span class="co"># -- create suffix --</span></span>
+<span id="cb90-57"><a href="core-functions.html#cb90-57" tabindex="-1"></a>  out_suffix <span class="ot">&lt;-</span> .suffix <span class="sc">%||%</span> <span class="fu">paste0</span>(<span class="st">"_"</span>, str.to)</span>
+<span id="cb90-58"><a href="core-functions.html#cb90-58" tabindex="-1"></a>  join_by <span class="ot">&lt;-</span> str.from</span>
+<span id="cb90-59"><a href="core-functions.html#cb90-59" tabindex="-1"></a>  </span>
+<span id="cb90-60"><a href="core-functions.html#cb90-60" tabindex="-1"></a>  data_out <span class="ot">&lt;-</span> <a href="core-functions.html#use_panel_map">use_panel_map</a>(<span class="at">.data =</span> subset_in, <span class="at">.map =</span> pm, </span>
+<span id="cb90-61"><a href="core-functions.html#cb90-61" tabindex="-1"></a>                <span class="at">.from =</span> {{from_code}}, <span class="at">.to =</span> {{to_code}}, <span class="at">.weights =</span> {{m_weights}},</span>
+<span id="cb90-62"><a href="core-functions.html#cb90-62" tabindex="-1"></a>                <span class="at">.vals =</span> {{values_from}}, <span class="at">.suffix =</span> out_suffix,</span>
+<span id="cb90-63"><a href="core-functions.html#cb90-63" tabindex="-1"></a>                <span class="at">.by =</span> join_by)</span>
+<span id="cb90-64"><a href="core-functions.html#cb90-64" tabindex="-1"></a>  </span>
+<span id="cb90-65"><a href="core-functions.html#cb90-65" tabindex="-1"></a>  <span class="fu">return</span>(data_out)</span>
+<span id="cb90-66"><a href="core-functions.html#cb90-66" tabindex="-1"></a>}</span></code></pre></div>
+<p>Internal function without checks</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="core-functions.html#cb91-1" tabindex="-1"></a><span class="co">#' Apply panel_map to data without checks</span></span>
+<span id="cb91-2"><a href="core-functions.html#cb91-2" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb91-3"><a href="core-functions.html#cb91-3" tabindex="-1"></a><span class="co">#' A wrapper around a `{dplyr}` pipeline that takes a panel_map,</span></span>
+<span id="cb91-4"><a href="core-functions.html#cb91-4" tabindex="-1"></a><span class="co">#' joins it with data, and transforms selected variables in that data according to</span></span>
+<span id="cb91-5"><a href="core-functions.html#cb91-5" tabindex="-1"></a><span class="co">#' instructions in the panel map. Any groups in `data_in` are preserved.</span></span>
+<span id="cb91-6"><a href="core-functions.html#cb91-6" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb91-7"><a href="core-functions.html#cb91-7" tabindex="-1"></a><span class="co">#' @param .data a Data Frame assumed to meet Source Data conditions</span></span>
+<span id="cb91-8"><a href="core-functions.html#cb91-8" tabindex="-1"></a><span class="co">#' @param .map a Data Frame assumed to meet Panel Map conditions</span></span>
+<span id="cb91-9"><a href="core-functions.html#cb91-9" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb91-10"><a href="core-functions.html#cb91-10" tabindex="-1"></a><span class="co">#' @return The output has the following properties:</span></span>
+<span id="cb91-11"><a href="core-functions.html#cb91-11" tabindex="-1"></a><span class="co">#' * Groups are taken from `data_in`</span></span>
+<span id="cb91-12"><a href="core-functions.html#cb91-12" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb91-13"><a href="core-functions.html#cb91-13" tabindex="-1"></a><span id="use_panel_map">use_panel_map</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(.data, .map, .from, .to, .weights, .vals,</span>
+<span id="cb91-14"><a href="core-functions.html#cb91-14" tabindex="-1"></a>                          .suffix, .by){</span>
+<span id="cb91-15"><a href="core-functions.html#cb91-15" tabindex="-1"></a>  </span>
+<span id="cb91-16"><a href="core-functions.html#cb91-16" tabindex="-1"></a>  <span class="co"># subset data for transformation</span></span>
+<span id="cb91-17"><a href="core-functions.html#cb91-17" tabindex="-1"></a>  data_in <span class="ot">&lt;-</span> .data <span class="sc">%&gt;%</span></span>
+<span id="cb91-18"><a href="core-functions.html#cb91-18" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>({{.from}}, {{.vals}})</span>
+<span id="cb91-19"><a href="core-functions.html#cb91-19" tabindex="-1"></a></span>
+<span id="cb91-20"><a href="core-functions.html#cb91-20" tabindex="-1"></a>  <span class="co"># merge map and data // use default by= argument</span></span>
+<span id="cb91-21"><a href="core-functions.html#cb91-21" tabindex="-1"></a>  map_join_data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">right_join</span>(<span class="at">x =</span> data_in,</span>
+<span id="cb91-22"><a href="core-functions.html#cb91-22" tabindex="-1"></a>                                     <span class="at">y =</span> .map,</span>
+<span id="cb91-23"><a href="core-functions.html#cb91-23" tabindex="-1"></a>                                     <span class="at">by =</span> .by)</span>
+<span id="cb91-24"><a href="core-functions.html#cb91-24" tabindex="-1"></a></span>
+<span id="cb91-25"><a href="core-functions.html#cb91-25" tabindex="-1"></a>  <span class="co"># apply transformation</span></span>
+<span id="cb91-26"><a href="core-functions.html#cb91-26" tabindex="-1"></a>  data_out <span class="ot">&lt;-</span> map_join_data <span class="sc">%&gt;%</span></span>
+<span id="cb91-27"><a href="core-functions.html#cb91-27" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(dplyr<span class="sc">::</span><span class="fu">across</span>({{ .vals }}, <span class="sc">~</span> .x <span class="sc">*</span> {{ .weights }})) <span class="sc">%&gt;%</span></span>
+<span id="cb91-28"><a href="core-functions.html#cb91-28" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>({{ .to }}, <span class="at">.add =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb91-29"><a href="core-functions.html#cb91-29" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(dplyr<span class="sc">::</span><span class="fu">across</span>({{ .vals }}, <span class="sc">~</span> <span class="fu">sum</span>(.x)), <span class="at">.groups =</span> <span class="st">"drop_last"</span>)</span>
+<span id="cb91-30"><a href="core-functions.html#cb91-30" tabindex="-1"></a></span>
+<span id="cb91-31"><a href="core-functions.html#cb91-31" tabindex="-1"></a>  <span class="co"># rename</span></span>
+<span id="cb91-32"><a href="core-functions.html#cb91-32" tabindex="-1"></a>  data_out <span class="ot">&lt;-</span> data_out <span class="sc">%&gt;%</span></span>
+<span id="cb91-33"><a href="core-functions.html#cb91-33" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename_with</span>(., <span class="sc">~</span> <span class="fu">paste0</span>(.x, .suffix), <span class="at">.cols =</span> {{.vals}})</span>
+<span id="cb91-34"><a href="core-functions.html#cb91-34" tabindex="-1"></a></span>
+<span id="cb91-35"><a href="core-functions.html#cb91-35" tabindex="-1"></a>  <span class="fu">return</span>(data_out)</span>
+<span id="cb91-36"><a href="core-functions.html#cb91-36" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="tests-3" class="section level4 hasAnchor" number="4.3.1.4">
+<h4>
+<span class="header-section-number">4.3.1.4</span> Tests<a href="core-functions.html#tests-3" class="anchor-section" aria-label="Anchor link to header"></a>
+</h4>
+<p>Define some test data:</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="core-functions.html#cb92-1" tabindex="-1"></a>equal_pm<span class="sc">$</span>data_B <span class="ot">&lt;-</span> </span>
+<span id="cb92-2"><a href="core-functions.html#cb92-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">right_join</span>(<span class="at">x =</span> equal_pm<span class="sc">$</span>data_A,</span>
+<span id="cb92-3"><a href="core-functions.html#cb92-3" tabindex="-1"></a>                    <span class="at">y =</span> equal_pm<span class="sc">$</span>pm_BA,</span>
+<span id="cb92-4"><a href="core-functions.html#cb92-4" tabindex="-1"></a>                    <span class="at">by =</span> <span class="st">"std_A"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb92-5"><a href="core-functions.html#cb92-5" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">A_100 =</span> A_100 <span class="sc">*</span> weight) <span class="sc">|&gt;</span></span>
+<span id="cb92-6"><a href="core-functions.html#cb92-6" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(std_B, <span class="at">.add =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb92-7"><a href="core-functions.html#cb92-7" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(dplyr<span class="sc">::</span><span class="fu">across</span>(<span class="fu">c</span>(A_100), <span class="sc">~</span> <span class="fu">sum</span>(.x), <span class="at">.names =</span> <span class="st">"{.col}_out"</span>),</span>
+<span id="cb92-8"><a href="core-functions.html#cb92-8" tabindex="-1"></a>                   <span class="at">.groups =</span> <span class="st">"drop_last"</span>)</span></code></pre></div>
+<p>Do the tests:</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="core-functions.html#cb93-1" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_that</span>(</span>
+<span id="cb93-2"><a href="core-functions.html#cb93-2" tabindex="-1"></a>  <span class="st">"<a href="core-functions.html#use_panel_map">use_panel_map</a>() works as expected"</span>, {</span>
+<span id="cb93-3"><a href="core-functions.html#cb93-3" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_identical</span>(</span>
+<span id="cb93-4"><a href="core-functions.html#cb93-4" tabindex="-1"></a>      <a href="core-functions.html#use_panel_map">use_panel_map</a>(<span class="at">.data =</span> equal_pm<span class="sc">$</span>data_A,</span>
+<span id="cb93-5"><a href="core-functions.html#cb93-5" tabindex="-1"></a>              <span class="at">.map =</span> equal_pm<span class="sc">$</span>pm_BA,</span>
+<span id="cb93-6"><a href="core-functions.html#cb93-6" tabindex="-1"></a>              <span class="at">.from =</span> std_A,</span>
+<span id="cb93-7"><a href="core-functions.html#cb93-7" tabindex="-1"></a>              <span class="at">.to =</span> std_B,</span>
+<span id="cb93-8"><a href="core-functions.html#cb93-8" tabindex="-1"></a>              <span class="at">.weights =</span> weight,</span>
+<span id="cb93-9"><a href="core-functions.html#cb93-9" tabindex="-1"></a>              <span class="at">.vals =</span> <span class="fu">c</span>(A_100),</span>
+<span id="cb93-10"><a href="core-functions.html#cb93-10" tabindex="-1"></a>              <span class="at">.suffix =</span> <span class="st">"_out"</span>,</span>
+<span id="cb93-11"><a href="core-functions.html#cb93-11" tabindex="-1"></a>              <span class="at">.by =</span> <span class="st">"std_A"</span>),</span>
+<span id="cb93-12"><a href="core-functions.html#cb93-12" tabindex="-1"></a>      equal_pm<span class="sc">$</span>data_B</span>
+<span id="cb93-13"><a href="core-functions.html#cb93-13" tabindex="-1"></a>    )</span>
+<span id="cb93-14"><a href="core-functions.html#cb93-14" tabindex="-1"></a>  }</span>
+<span id="cb93-15"><a href="core-functions.html#cb93-15" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Test passed</code></pre>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="core-functions.html#cb95-1" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_that</span>(</span>
+<span id="cb95-2"><a href="core-functions.html#cb95-2" tabindex="-1"></a>  <span class="st">"<a href="core-functions.html#concord">concord</a>() raises expected errors"</span>,</span>
+<span id="cb95-3"><a href="core-functions.html#cb95-3" tabindex="-1"></a>  {</span>
+<span id="cb95-4"><a href="core-functions.html#cb95-4" tabindex="-1"></a>    <span class="do">## columns not in data_in</span></span>
+<span id="cb95-5"><a href="core-functions.html#cb95-5" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_error</span>(<a href="core-functions.html#concord">concord</a>(<span class="at">data_in =</span> equal_pm<span class="sc">$</span>data_A,</span>
+<span id="cb95-6"><a href="core-functions.html#cb95-6" tabindex="-1"></a>                                   <span class="at">pm =</span> equal_pm<span class="sc">$</span>pm_BA,</span>
+<span id="cb95-7"><a href="core-functions.html#cb95-7" tabindex="-1"></a>                                   <span class="at">from_code =</span> std_A,</span>
+<span id="cb95-8"><a href="core-functions.html#cb95-8" tabindex="-1"></a>                                   <span class="at">to_code =</span> std_B,</span>
+<span id="cb95-9"><a href="core-functions.html#cb95-9" tabindex="-1"></a>                                   <span class="at">m_weights =</span> weight,</span>
+<span id="cb95-10"><a href="core-functions.html#cb95-10" tabindex="-1"></a>                                   <span class="at">values_from =</span> <span class="fu">c</span>(missing_col1, missing_col2)</span>
+<span id="cb95-11"><a href="core-functions.html#cb95-11" tabindex="-1"></a>                                   ),</span>
+<span id="cb95-12"><a href="core-functions.html#cb95-12" tabindex="-1"></a>                           <span class="at">class=</span><span class="st">"vals_not_found"</span>)</span>
+<span id="cb95-13"><a href="core-functions.html#cb95-13" tabindex="-1"></a>    <span class="do">## missing values in data_in</span></span>
+<span id="cb95-14"><a href="core-functions.html#cb95-14" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_error</span>(<a href="core-functions.html#concord">concord</a>(equal_pm<span class="sc">$</span>bad_data, equal_pm<span class="sc">$</span>pm_BA, std_A, std_B, weight,</span>
+<span id="cb95-15"><a href="core-functions.html#cb95-15" tabindex="-1"></a>                                   <span class="at">values_from =</span> <span class="fu">c</span>(A_100)</span>
+<span id="cb95-16"><a href="core-functions.html#cb95-16" tabindex="-1"></a>                                   ),</span>
+<span id="cb95-17"><a href="core-functions.html#cb95-17" tabindex="-1"></a>                           <span class="at">class=</span><span class="st">"vals_na"</span></span>
+<span id="cb95-18"><a href="core-functions.html#cb95-18" tabindex="-1"></a>                           )</span>
+<span id="cb95-19"><a href="core-functions.html#cb95-19" tabindex="-1"></a>    <span class="do">## invalid weights are flagged</span></span>
+<span id="cb95-20"><a href="core-functions.html#cb95-20" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_error</span>(<a href="core-functions.html#concord">concord</a>(equal_pm<span class="sc">$</span>data_A, equal_pm<span class="sc">$</span>bad_weights, std_A, std_B, weight,</span>
+<span id="cb95-21"><a href="core-functions.html#cb95-21" tabindex="-1"></a>                                   <span class="at">values_from =</span> <span class="fu">c</span>(A_100)</span>
+<span id="cb95-22"><a href="core-functions.html#cb95-22" tabindex="-1"></a>                                   ),</span>
+<span id="cb95-23"><a href="core-functions.html#cb95-23" tabindex="-1"></a>                           <span class="at">class=</span><span class="st">"invalid_weights"</span></span>
+<span id="cb95-24"><a href="core-functions.html#cb95-24" tabindex="-1"></a>                           )</span>
+<span id="cb95-25"><a href="core-functions.html#cb95-25" tabindex="-1"></a>  }</span>
+<span id="cb95-26"><a href="core-functions.html#cb95-26" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Test passed</code></pre>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="core-functions.html#cb97-1" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_that</span>(</span>
+<span id="cb97-2"><a href="core-functions.html#cb97-2" tabindex="-1"></a>  <span class="st">"<a href="core-functions.html#concord">concord</a>() works as expected"</span>,</span>
+<span id="cb97-3"><a href="core-functions.html#cb97-3" tabindex="-1"></a>  {</span>
+<span id="cb97-4"><a href="core-functions.html#cb97-4" tabindex="-1"></a>    testthat<span class="sc">::</span><span class="fu">expect_identical</span>(<a href="core-functions.html#concord">concord</a>(<span class="at">data_in =</span> equal_pm<span class="sc">$</span>data_A,</span>
+<span id="cb97-5"><a href="core-functions.html#cb97-5" tabindex="-1"></a>                             <span class="at">pm =</span> equal_pm<span class="sc">$</span>pm_BA,</span>
+<span id="cb97-6"><a href="core-functions.html#cb97-6" tabindex="-1"></a>                             <span class="at">from_code =</span> std_A,</span>
+<span id="cb97-7"><a href="core-functions.html#cb97-7" tabindex="-1"></a>                             <span class="at">to_code =</span> std_B,</span>
+<span id="cb97-8"><a href="core-functions.html#cb97-8" tabindex="-1"></a>                             <span class="at">m_weights =</span> weight,</span>
+<span id="cb97-9"><a href="core-functions.html#cb97-9" tabindex="-1"></a>                             <span class="at">values_from =</span> <span class="fu">c</span>(A_100),</span>
+<span id="cb97-10"><a href="core-functions.html#cb97-10" tabindex="-1"></a>                             <span class="at">.suffix =</span> <span class="st">"_out"</span>),</span>
+<span id="cb97-11"><a href="core-functions.html#cb97-11" tabindex="-1"></a>                     equal_pm<span class="sc">$</span>data_B</span>
+<span id="cb97-12"><a href="core-functions.html#cb97-12" tabindex="-1"></a>                     )</span>
+<span id="cb97-13"><a href="core-functions.html#cb97-13" tabindex="-1"></a>  }</span>
+<span id="cb97-14"><a href="core-functions.html#cb97-14" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## Test passed</code></pre>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+</div>
+        </div>
+      </div>
+<a href="package-setup.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="package-datasets.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script><script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script><script src="libs/gitbook-2.6.7/js/plugin-search.js"></script><script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script><script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script><script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script><script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script><script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script><script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+</html>
